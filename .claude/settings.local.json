@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\adjua\\\\Desktop\\\\solar-full-energy\")",
+      "Bash(Select-Object Name, PSIsContainer)",
+      "Bash(mv \"WhatsApp Image 2026-05-08 at 10.15.49 PM.jpeg\"    instalacion_01.jpeg)",
+      "Bash(mv \"WhatsApp Image 2026-05-08 at 10.15.49 PM \\(1\\).jpeg\" instalacion_02.jpeg)",
+      "Bash(mv \"WhatsApp Image 2026-05-08 at 10.15.49 PM \\(2\\).jpeg\" instalacion_03.jpeg)",
+      "Bash(mv \"WhatsApp Image 2026-05-08 at 10.15.49 PM \\(3\\).jpeg\" instalacion_04.jpeg)",
+      "Bash(mv \"WhatsApp Image 2026-05-08 at 10.15.50 PM.jpeg\"    instalacion_05.jpeg)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "PowerShell(python -c \"import fitz; print\\('pymupdf ok'\\)\" 2>&1; python -c \"import PIL; print\\('pillow ok'\\)\" 2>&1; python -c \"import pdf2image; print\\('pdf2image ok'\\)\" 2>&1)",
+      "PowerShell(pip install *)",
+      "PowerShell(python -c \"import fitz; print\\('pymupdf', fitz.__version__\\)\")",
+      "PowerShell(python \"C:\\\\Users\\\\adjua\\\\Desktop\\\\solar-full-energy\\\\convert_logo.py\")"
+    ]
+  }
+}
