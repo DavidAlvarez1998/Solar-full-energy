@@ -13,7 +13,8 @@
       "PowerShell(python -c \"import fitz; print\\('pymupdf ok'\\)\" 2>&1; python -c \"import PIL; print\\('pillow ok'\\)\" 2>&1; python -c \"import pdf2image; print\\('pdf2image ok'\\)\" 2>&1)",
       "PowerShell(pip install *)",
       "PowerShell(python -c \"import fitz; print\\('pymupdf', fitz.__version__\\)\")",
-      "PowerShell(python \"C:\\\\Users\\\\adjua\\\\Desktop\\\\solar-full-energy\\\\convert_logo.py\")"
+      "PowerShell(python \"C:\\\\Users\\\\adjua\\\\Desktop\\\\solar-full-energy\\\\convert_logo.py\")",
+      "Bash(npm install *)"
     ]
   }
 }

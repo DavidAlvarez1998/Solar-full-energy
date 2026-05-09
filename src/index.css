@@ -46,6 +46,7 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
+    min-height: 100dvh;
     overflow-x: hidden;
     transition: background 0.3s ease, color 0.3s ease;
   }
@@ -123,6 +124,7 @@
     border-radius: 8px;
     padding: 1rem;
     text-align: center;
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     transition: transform 0.2s;
   }
