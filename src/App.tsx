@@ -78,7 +78,7 @@ const App = () => {
         />
       </div>
 
-      <Sidebar
+      {/* <Sidebar
         activeSection={activeSection}
         collapsed={collapsed}
         isMobile={isMobile}
@@ -86,7 +86,7 @@ const App = () => {
         onNavigate={navigate}
         onToggle={toggle}
         onClose={closeMobile}
-      />
+      /> */}
       
 
       <div
