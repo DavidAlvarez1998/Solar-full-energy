@@ -311,6 +311,14 @@
 .animate-lbPop { animation: lbPop 0.28s cubic-bezier(0.34,1.56,0.64,1); }
 .animate-logoPulse { animation: logoPulse 3s ease-in-out infinite; }
 
+/* ── iOS / Mobile: disable heavy GPU filters to prevent WebKit crash ── */
+@media (max-width: 768px), (hover: none) {
+  /* Aurora blobs: remove blur entirely — filter:blur on large fixed elements crashes iOS Safari */
+  .aurora-blob { filter: none !important; opacity: 0.4; }
+  /* Disable aurora animations on mobile to reduce compositing layers */
+  .animate-aurora1, .animate-aurora2 { animation: none !important; }
+}
+
 /* ── Responsive: chat panel single column ── */
 @media (max-width: 900px) {
   .chat-layout-grid { grid-template-columns: 1fr !important; }

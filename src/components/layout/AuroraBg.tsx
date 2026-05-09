@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 
+const isMobileDevice = () => window.innerWidth < 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
 const AuroraBg = () => {
   const starsRef = useRef<HTMLDivElement>(null);
   const particlesRef = useRef<boolean>(false);
@@ -7,7 +9,9 @@ const AuroraBg = () => {
   useEffect(() => {
     if (!starsRef.current) return;
     const container = starsRef.current;
-    for (let i = 0; i < 100; i++) {
+    // Reduce stars heavily on mobile/iOS to avoid GPU overload
+    const starCount = isMobileDevice() ? 25 : 100;
+    for (let i = 0; i < starCount; i++) {
       const star = document.createElement('div');
       const sz = Math.random() * 2.5 + 0.5;
       star.style.cssText = `
@@ -28,6 +32,8 @@ const AuroraBg = () => {
   useEffect(() => {
     if (particlesRef.current) return;
     particlesRef.current = true;
+    // Skip floating particles on mobile/iOS — they create fixed compositing layers that crash WebKit
+    if (isMobileDevice()) return;
     const colors = [
       'rgba(255,208,0,VAL)', 'rgba(255,140,0,VAL)',
       'rgba(0,255,179,VAL)', 'rgba(6,182,212,VAL)',
@@ -62,7 +68,7 @@ const AuroraBg = () => {
         aria-hidden="true"
       >
         <div
-          className="absolute animate-aurora1"
+          className="absolute aurora-blob animate-aurora1"
           style={{
             width: '75vw', height: '75vw', top: '-30vw', left: '-10vw',
             background: 'radial-gradient(ellipse, rgba(255,215,0,0.08) 0%, rgba(255,179,0,0.03) 45%, transparent 70%)',
@@ -70,7 +76,7 @@ const AuroraBg = () => {
           }}
         />
         <div
-          className="absolute animate-aurora2"
+          className="absolute aurora-blob animate-aurora2"
           style={{
             width: '65vw', height: '65vw', bottom: '-25vw', right: '-15vw',
             background: 'radial-gradient(ellipse, rgba(37,99,235,0.06) 0%, rgba(59,130,246,0.03) 50%, transparent 70%)',
@@ -78,7 +84,7 @@ const AuroraBg = () => {
           }}
         />
         <div
-          className="absolute"
+          className="absolute aurora-blob"
           style={{
             width: '50vw', height: '50vw', top: '25%', left: '35%',
             background: 'radial-gradient(ellipse, rgba(30,64,175,0.05) 0%, transparent 65%)',
