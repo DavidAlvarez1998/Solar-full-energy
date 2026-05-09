@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import type { SectionId } from './types';
 import { useSidebar } from './hooks/useSidebar';
 import AuroraBg from './components/layout/AuroraBg';
-import Sidebar from './components/layout/Sidebar';
+// import Sidebar from './components/layout/Sidebar';
 import Topbar from './components/layout/Topbar';
 import WhatsAppFAB from './components/layout/WhatsAppFAB';
 import Dashboard from './components/sections/Dashboard';
