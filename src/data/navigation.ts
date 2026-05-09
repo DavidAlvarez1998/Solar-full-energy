@@ -9,7 +9,7 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const SECTION_META: Record<SectionId, SectionMeta> = {
-  dashboard: { title: 'DASHBOARD PRINCIPAL', subtitle: 'Panel de control · Energía Solar Inteligente' },
+  dashboard: { title: 'DASHBOARD', subtitle: 'Energía Solar Inteligente' },
   servicios: { title: 'SERVICIOS PRESTADOS', subtitle: 'Catálogo de consultoría y diseño solar' },
   instalados: { title: 'SERVICIOS INSTALADOS', subtitle: 'Historial de instalaciones en Colombia' },
   redes: { title: 'REDES SOCIALES', subtitle: 'Comunidad digital · Conéctate con nosotros' },

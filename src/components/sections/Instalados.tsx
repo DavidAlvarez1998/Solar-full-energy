@@ -52,17 +52,6 @@ const Instalados = () => {
         <p className="text-text-muted mt-1 text-sm">Historial de instalaciones completadas a lo largo de Colombia</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid gap-4 mb-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
-        {stats.map((s) => (
-          <div key={s.label} className="stat-chip">
-            <span className="block text-2xl mb-1">{s.emoji}</span>
-            <div className="font-orbitron font-bold text-accent" style={{ fontSize: '0.95rem' }}>{s.value}</div>
-            <div className="text-text-muted uppercase tracking-widest mt-0.5" style={{ fontSize: '0.68rem' }}>{s.label}</div>
-          </div>
-        ))}
-      </div>
-
       {/* Gallery label */}
       <GalLabel emoji="📸" text="Galería de instalaciones reales · Solar Full Energy" color="rgba(255,208,0,0.3)" />
 
@@ -133,6 +122,17 @@ const Instalados = () => {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid gap-4 mt-8" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
+        {stats.map((s) => (
+          <div key={s.label} className="stat-chip">
+            <span className="block text-2xl mb-1">{s.emoji}</span>
+            <div className="font-orbitron font-bold text-accent" style={{ fontSize: '0.95rem' }}>{s.value}</div>
+            <div className="text-text-muted uppercase tracking-widest mt-0.5" style={{ fontSize: '0.68rem' }}>{s.label}</div>
+          </div>
+        ))}
       </div>
     </section>
 

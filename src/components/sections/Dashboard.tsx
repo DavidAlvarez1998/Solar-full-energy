@@ -26,17 +26,6 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
       <p className="text-text-muted mt-1 text-sm">Bienvenido al sistema de gestión de energía solar — Pereira, Colombia</p>
     </div>
 
-    {/* Stats */}
-    <div className="grid gap-4 mb-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
-      {stats.map((s) => (
-        <div key={s.label} className="stat-chip">
-          <span className="block text-2xl mb-1">{s.emoji}</span>
-          <div className="font-orbitron font-bold text-accent" style={{ fontSize: '0.95rem' }}>{s.value}</div>
-          <div className="text-text-muted uppercase tracking-widest mt-0.5" style={{ fontSize: '0.68rem' }}>{s.label}</div>
-        </div>
-      ))}
-    </div>
-
     {/* Cards */}
     <div className="grid gap-5 mb-6" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
       {cards.map((c) => (
@@ -64,7 +53,7 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
 
     {/* CTA */}
     <div
-      className="glass-card p-5"
+      className="glass-card p-5 mb-6"
       style={{ background: 'linear-gradient(135deg,rgba(255,140,0,0.08),rgba(255,208,0,0.04))', borderColor: 'rgba(255,208,0,0.2)' }}
     >
       <div className="flex items-center gap-4 flex-wrap">
@@ -91,6 +80,17 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
           🤖 Iniciar Cotización
         </button>
       </div>
+    </div>
+
+    {/* Stats */}
+    <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
+      {stats.map((s) => (
+        <div key={s.label} className="stat-chip">
+          <span className="block text-2xl mb-1">{s.emoji}</span>
+          <div className="font-orbitron font-bold text-accent" style={{ fontSize: '0.95rem' }}>{s.value}</div>
+          <div className="text-text-muted uppercase tracking-widest mt-0.5" style={{ fontSize: '0.68rem' }}>{s.label}</div>
+        </div>
+      ))}
     </div>
   </section>
 );
