@@ -1,4 +1,4 @@
-export type SectionId = 'dashboard' | 'servicios' | 'instalados' | 'redes' | 'chatbot';
+export type SectionId = 'dashboard' | 'servicios' | 'instalados' | 'redes' | 'chatbot' | 'admin';
 
 export interface NavItem {
   id: SectionId;
@@ -48,6 +48,7 @@ export interface CityData {
   transporte: number;
   hospedaje: number;
   alimentacion: number;
+  department: string;
 }
 
 export interface QuoteResult {
@@ -69,13 +70,22 @@ export interface QuoteResult {
   saving25y: number;
 }
 
-export type ChatStep = 'welcome' | 'email' | 'phone' | 'city' | 'bill' | 'quote' | 'interest' | 'restart';
+export type ChatStep =
+  | 'welcome'
+  | 'bill'
+  | 'department'
+  | 'city'
+  | 'quote'
+  | 'email'
+  | 'phone'
+  | 'interest'
+  | 'restart';
 
 export interface ChatState {
   step: ChatStep;
-  name: string | null;
   email: string | null;
   phone: string | null;
+  department: string | null;
   city: string | null;
   bill: number | null;
   lastQuote: QuoteResult | null;
@@ -85,17 +95,25 @@ export interface ChatMessage {
   id: string;
   type: 'bot' | 'user';
   content: string;
-  quoteData?: { quote: QuoteResult; cityName: string; clientName: string; clientEmail: string };
+  quoteData?: { quote: QuoteResult; cityName: string; clientEmail: string | null };
 }
 
+export type LeadStatus = 'nuevo' | 'contactado' | 'en_seguimiento' | 'convertido' | 'descartado';
+
 export interface Lead {
-  id: number;
-  timestamp: string;
-  name: string;
-  email: string;
-  phone: string;
+  id: string;
+  created_at: string;
+  email: string | null;
+  phone: string | null;
+  department: string | null;
   city: string;
-  billAmount: number;
+  bill: number;
+  panels: number;
+  system_cost: number;
+  payback: number;
+  saving_25y: number;
   interested: boolean;
-  quoteData: { panels: number; systemCost: number; payback: number };
+  status: LeadStatus;
+  notes: string | null;
+  last_contact: string | null;
 }

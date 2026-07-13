@@ -71,6 +71,27 @@ const Topbar = ({ activeSection, theme, onThemeToggle, onMenuToggle, isMobile }:
       </div>
 
       <div className="flex items-center gap-2 flex-shrink-0">
+        {/* Email chip — mobile only */}
+        {isMobile && (
+          <a
+            href="mailto:solarfullenergy@gmail.com"
+            title="solarfullenergy@gmail.com"
+            style={{
+              display: 'flex', alignItems: 'center', gap: '0.3rem',
+              padding: '0.25rem 0.6rem',
+              borderRadius: 20,
+              fontSize: '0.72rem',
+              textDecoration: 'none',
+              color: '#60a5fa',
+              background: 'rgba(37,99,235,0.08)',
+              border: '1px solid rgba(37,99,235,0.2)',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            ✉️ Email
+          </a>
+        )}
+
         {/* Active indicator — hidden on very small screens */}
         <div
           className="hidden sm:flex items-center gap-1.5"

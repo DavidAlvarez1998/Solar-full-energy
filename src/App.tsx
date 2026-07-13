@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, lazy, Suspense } from 'react';
 import type { SectionId } from './types';
 import { useSidebar } from './hooks/useSidebar';
 import AuroraBg from './components/layout/AuroraBg';
@@ -11,14 +11,16 @@ import Instalados from './components/sections/Instalados';
 import Redes from './components/sections/Redes';
 import Chatbot from './components/sections/Chatbot';
 
+const Admin = lazy(() => import('./sections/Admin'));
+
 const SIDEBAR_W         = 270;
 const SIDEBAR_COLLAPSED = 80;
 
-const VALID_SECTIONS: SectionId[] = ['dashboard', 'servicios', 'instalados', 'redes', 'chatbot'];
+const VALID_SECTIONS: SectionId[] = ['dashboard', 'servicios', 'instalados', 'redes', 'chatbot', 'admin'];
 
 const getSectionFromHash = (): SectionId => {
-  const hash = window.location.hash.slice(1) as SectionId;
-  return VALID_SECTIONS.includes(hash) ? hash : 'dashboard';
+  const hash = window.location.hash.replace('#', '').split('/')[0];
+  return VALID_SECTIONS.includes(hash as SectionId) ? (hash as SectionId) : 'dashboard';
 };
 
 const App = () => {
@@ -108,6 +110,11 @@ const App = () => {
           {activeSection === 'instalados' && <Instalados />}
           {activeSection === 'redes'      && <Redes />}
           {activeSection === 'chatbot'    && <Chatbot />}
+          {activeSection === 'admin'      && (
+            <Suspense fallback={<div style={{ color: '#94a3b8', padding: '2rem' }}>Cargando...</div>}>
+              <Admin />
+            </Suspense>
+          )}
         </main>
       </div>
 

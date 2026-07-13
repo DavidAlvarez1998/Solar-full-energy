@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { GALLERY_IMAGES } from '../../data/gallery';
+import { useGallery } from '../../hooks/useGallery';
+import type { GalleryImage } from '../../types';
 
 const stats = [
   { emoji: '⚡', value: '847', label: 'Instalaciones' },
@@ -16,6 +17,7 @@ const posts = [
 ];
 
 const Instalados = () => {
+  const { images, loading } = useGallery();
   const [lightbox, setLightbox] = useState<{ open: boolean; index: number }>({ open: false, index: 0 });
 
   const openLb = (i: number) => setLightbox({ open: true, index: i });
@@ -23,9 +25,9 @@ const Instalados = () => {
   const navigate = useCallback((dir: number) => {
     setLightbox((prev) => ({
       open: true,
-      index: (prev.index + dir + GALLERY_IMAGES.length) % GALLERY_IMAGES.length,
+      index: (prev.index + dir + images.length) % images.length,
     }));
-  }, []);
+  }, [images.length]);
 
   useEffect(() => {
     if (!lightbox.open) return;
@@ -42,7 +44,7 @@ const Instalados = () => {
     };
   }, [lightbox.open, navigate]);
 
-  const current = GALLERY_IMAGES[lightbox.index];
+  const current = images[lightbox.index];
 
   return (
     <>
@@ -57,9 +59,15 @@ const Instalados = () => {
 
       {/* Gallery — columnas CSS para acomodar cualquier proporción */}
       <div className="mb-8" style={{ columns: '280px', columnGap: '1.25rem' }}>
-        {GALLERY_IMAGES.map((img, i) => (
-          <GalleryItem key={img.src} img={img} index={i} onOpen={openLb} />
-        ))}
+        {loading ? (
+          <div style={{ color: '#94a3b8', textAlign: 'center', padding: '2rem' }}>Cargando galería...</div>
+        ) : images.length === 0 ? (
+          <div style={{ color: '#64748b', textAlign: 'center', padding: '2rem' }}>No hay imágenes aún. Subí las fotos desde el panel admin.</div>
+        ) : (
+          images.map((img, i) => (
+            <GalleryItem key={img.src} img={img} index={i} onOpen={openLb} />
+          ))
+        )}
       </div>
 
       {/* Video label */}
@@ -110,7 +118,7 @@ const Instalados = () => {
               <div className="text-text-dim mt-2" style={{ fontSize: '0.65rem' }}>{p.time}</div>
             </div>
           ))}
-          {GALLERY_IMAGES.slice(4).map((img) => (
+          {images.slice(4).map((img) => (
             <div key={img.src} className="rounded-xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', padding: '0.5rem' }}>
               <img
                 src={img.src}
@@ -182,7 +190,7 @@ const Instalados = () => {
           className="absolute z-[9999] font-rajdhani tracking-widest whitespace-nowrap"
           style={{ bottom: '1.4rem', left: '50%', transform: 'translateX(-50%)', background: 'rgba(8,16,36,0.88)', border: '1px solid rgba(255,208,0,0.2)', borderRadius: 30, padding: '0.42rem 1.4rem', fontSize: '0.78rem', color: 'rgba(255,208,0,0.88)', backdropFilter: 'blur(8px)' }}
         >
-          {lightbox.index + 1} / {GALLERY_IMAGES.length} · {current.title}
+          {lightbox.index + 1} / {images.length} · {current.title}
         </div>
       </div>,
       document.body
@@ -199,7 +207,7 @@ const GalLabel = ({ emoji, text, color }: { emoji: string; text: string; color: 
 );
 
 interface GalleryItemProps {
-  img: (typeof GALLERY_IMAGES)[number];
+  img: GalleryImage;
   index: number;
   onOpen: (i: number) => void;
 }

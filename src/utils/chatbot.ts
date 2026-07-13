@@ -1,5 +1,6 @@
-import { CITIES, BASE_CITY, PANEL_COST, LABOR_COST } from '../data/cities';
-import type { QuoteResult, Lead } from '../types';
+import { CITIES, BASE_CITY, PANEL_COST, LABOR_COST, getCitiesByDepartment } from '../data/cities';
+import type { QuoteResult } from '../types';
+import { insertLead, type InsertLeadPayload } from '../lib/leads';
 
 export const fmtCOP = (n: number): string =>
   '$' + Math.round(n).toLocaleString('es-CO');
@@ -11,12 +12,13 @@ const estDays = (panels: number): number => {
   return 5;
 };
 
-export const findCity = (input: string): string | null => {
+export const findCity = (input: string, department: string | null = null): string | null => {
   const normalize = (t: string) =>
     t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   const ni = normalize(input);
+  const pool = department ? getCitiesByDepartment(department) : Object.keys(CITIES);
   return (
-    Object.keys(CITIES).find((c) => {
+    pool.find((c) => {
       const nc = normalize(c);
       return nc.includes(ni) || ni.includes(nc);
     }) ?? null
@@ -67,16 +69,10 @@ export const calcSystem = (bill: number, cityName: string): QuoteResult => {
   };
 };
 
-export const saveLead = (lead: Omit<Lead, 'id' | 'timestamp'>): void => {
-  try {
-    const existing: Lead[] = JSON.parse(
-      localStorage.getItem('solar_leads') ?? '[]'
-    );
-    existing.push({ id: Date.now(), timestamp: new Date().toISOString(), ...lead });
-    localStorage.setItem('solar_leads', JSON.stringify(existing));
-  } catch {
-    /* silently fail */
-  }
+
+
+export const saveLead = async (payload: InsertLeadPayload): Promise<void> => {
+  await insertLead(payload);
 };
 
 export const TOP_CITIES = [

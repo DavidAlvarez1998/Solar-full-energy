@@ -33,7 +33,7 @@ const Chatbot = () => {
   return (
     <section className="animate-fadeIn">
       <div className="text-center mb-10" style={{ maxWidth: 700, margin: '0 auto 2.5rem' }}>
-        <h1 className="shimmer-text font-orbitron font-black tracking-wide mb-3" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)' }}>🤖 Asistente Solar Inteligente</h1>
+        <h1 className="shimmer-text font-orbitron font-black tracking-wide mb-3" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)' }}>☀️ Cotiza tu Sistema Solar</h1>
         <p className="text-text-muted font-medium" style={{ fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}>
           Tu camino hacia la independencia energética comienza aquí. Obtén una cotización personalizada de nivel industrial en menos de 2 minutos.
         </p>
@@ -57,7 +57,7 @@ const Chatbot = () => {
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#FF5F57' }} />
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#FFBD2E' }} />
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#28CA41' }} />
-            <span className="ml-auto font-rajdhani text-text-muted uppercase tracking-widest" style={{ fontSize: '0.8rem' }}>🤖 Asistente Solar</span>
+            <span className="ml-auto font-rajdhani text-text-muted uppercase tracking-widest" style={{ fontSize: '0.8rem' }}>☀️ Cotizador Solar</span>
             <div className="flex items-center gap-1.5 text-xs ml-2 px-2 py-0.5 rounded-full" style={{ background: 'rgba(37,99,235,0.1)', border: '1px solid rgba(37,99,235,0.2)', color: '#2563eb' }}>
               <span className="w-1.5 h-1.5 rounded-full animate-blink" style={{ background: '#2563eb', display: 'inline-block' }} />
               En línea
@@ -192,7 +192,7 @@ const ChatSidebar = () => (
     <InfoCard>
       <h3 className="font-bold mb-3" style={{ fontSize: '0.9rem', color: 'var(--text)' }}>📊 ¿Cómo funciona?</h3>
       <ul className="space-y-2">
-        {['Ingresa tu nombre', 'Proporciona tu email', 'Indica tu teléfono', 'Selecciona tu ciudad', 'Indica tu factura mensual', 'Recibe tu cotización ✅'].map((step, i) => (
+        {['Indica tu factura', 'Selecciona tu departamento', 'Selecciona tu ciudad', 'Recibe tu cotización ✅', 'Comparte tu contacto', 'Un asesor te llama'].map((step, i) => (
           <li key={step} className="flex items-center gap-2 text-text-muted" style={{ fontSize: '0.82rem' }}>
             <span className="text-base">{['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣'][i]}</span>
             {step}

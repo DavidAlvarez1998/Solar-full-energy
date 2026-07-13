@@ -4,6 +4,7 @@ import { NAV_ITEMS } from '../../data/navigation';
 import WhatsAppIcon from '../icons/WhatsAppIcon';
 import InstagramIcon from '../icons/InstagramIcon';
 import FacebookIcon from '../icons/FacebookIcon';
+import EmailIcon from '../icons/EmailIcon';
 
 interface SidebarProps {
   activeSection: SectionId;
@@ -19,6 +20,7 @@ const SOCIAL_LINKS = [
   { href: 'https://wa.me/573217344209',                             title: 'WhatsApp',  Icon: WhatsAppIcon,  color: '#25D366', glow: 'rgba(37,211,102,0.35)' },
   { href: 'https://www.instagram.com/solar_full_energy_aj/',        title: 'Instagram', Icon: InstagramIcon, color: '#E1306C', glow: 'rgba(225,48,108,0.35)'  },
   { href: 'https://www.facebook.com/profile.php?id=61552494544943', title: 'Facebook',  Icon: FacebookIcon,  color: '#1877F2', glow: 'rgba(24,119,242,0.35)'  },
+  { href: 'mailto:solarfullenergy@gmail.com',                       title: 'Email',     Icon: EmailIcon,     color: '#2563eb', glow: 'rgba(37,99,235,0.35)'   },
 ];
 
 const Sidebar = ({ activeSection, collapsed, isMobile, mobileOpen, onNavigate, onToggle, onClose }: SidebarProps) => {

@@ -1,13 +1,20 @@
 import { useState, useCallback, useRef } from 'react';
-import type { ChatMessage, ChatState } from '../types';
-import { findCity, calcSystem, saveLead, TOP_CITIES, BILL_CHIPS } from '../utils/chatbot';
-import { CITIES, BASE_CITY } from '../data/cities';
+import type { ChatMessage, ChatState, ChatStep } from '../types';
+import { findCity, calcSystem, saveLead, BILL_CHIPS } from '../utils/chatbot';
+import { getDepartments, getCitiesByDepartment, CITIES } from '../data/cities';
+
+export const STEP_ORDER: ChatStep[] = [
+  'welcome', 'bill', 'department', 'city',
+  'quote', 'email', 'phone', 'interest', 'restart',
+];
+
+export const DEPARTMENT_CHIPS: string[] = getDepartments();
 
 const initialState: ChatState = {
   step: 'welcome',
-  name: null,
   email: null,
   phone: null,
+  department: null,
   city: null,
   bill: null,
   lastQuote: null,
@@ -45,14 +52,87 @@ export const useChatbot = () => {
     stateRef.current = { ...stateRef.current, ...patch };
   }, []);
 
-  const processInput = useCallback((val: string) => {
+  const processInput = useCallback(async (val: string) => {
     const s = stateRef.current;
 
     switch (s.step) {
       case 'welcome': {
-        updateState({ name: val, step: 'email' });
+        // welcome step: user submits bill amount directly (RF-09)
+        const num = parseFloat(val.replace(/[^0-9.]/g, ''));
+        if (!isNaN(num) && num > 0) {
+          updateState({ bill: num, step: 'department' });
+          setChips(DEPARTMENT_CHIPS);
+          botReply('Perfecto ✅\n\n¿En qué departamento de Colombia estás? Selecciona o escribe tu departamento.');
+        } else {
+          botReply('Por favor ingresa un valor válido en pesos colombianos.\nEjemplo: 150000');
+          setChips(BILL_CHIPS);
+        }
+        break;
+      }
+      case 'bill': {
+        const num = parseFloat(val.replace(/[^0-9.]/g, ''));
+        if (!isNaN(num) && num > 0) {
+          updateState({ bill: num, step: 'department' });
+          setChips(DEPARTMENT_CHIPS);
+          botReply('Perfecto ✅\n\n¿En qué departamento de Colombia estás? Selecciona o escribe tu departamento.');
+        } else {
+          botReply('Por favor ingresa un valor válido en pesos colombianos.\nEjemplo: 150000');
+        }
+        break;
+      }
+      case 'department': {
+        const depts = getDepartments();
+        const normalize = (t: string) =>
+          t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+        const ni = normalize(val);
+        const found = depts.find((d) => {
+          const nd = normalize(d);
+          return nd.includes(ni) || ni.includes(nd);
+        }) ?? null;
+        if (found) {
+          updateState({ department: found, step: 'city' });
+          const cities = getCitiesByDepartment(found);
+          setChips(cities);
+          botReply(`Departamento: ${found} 📍\n\n¿En qué municipio estás? Selecciona o escribe tu ciudad.`);
+        } else {
+          setChips(DEPARTMENT_CHIPS);
+          botReply('No encontré ese departamento. 😕\n\nPor favor selecciona uno de la lista o escríbelo correctamente.');
+        }
+        break;
+      }
+      case 'city': {
+        const city = findCity(val, s.department);
+        if (city) {
+          updateState({ city, step: 'quote' });
+          setChips([]);
+          botReply('📊 Calculando tu cotización personalizada...\n\nUn momento por favor ⏳');
+          setTimeout(() => {
+            const current = stateRef.current;
+            if (!current.city || current.bill === null) return;
+            const quote = calcSystem(current.bill, current.city);
+            updateState({ lastQuote: quote });
+            addBotQuote({ quote, cityName: current.city, clientEmail: current.email });
+            setTimeout(() => {
+              setChips(['Sí, quiero la cotización formal 🌟', 'No por ahora']);
+              addBot(`✅ ¡Cotización lista!\n\n¿Te gustaría que un asesor te contacte con la cotización formal y más detalles? 😊`);
+            }, 600);
+          }, 1400);
+        } else {
+          const dept = s.department;
+          const availableCities = dept ? getCitiesByDepartment(dept) : [];
+          const list = availableCities.length > 0
+            ? availableCities.join(' · ')
+            : Object.keys(CITIES).slice(0, 8).join(' · ');
+          setChips(dept ? availableCities : []);
+          botReply(`No encontré esa ciudad. 😕\n\nCiudades disponibles en ${dept ?? 'Colombia'}:\n${list}\n\n¿Podrías seleccionar una?`);
+        }
+        break;
+      }
+      case 'quote': {
+        // user confirms they want formal quote → ask for email
+        updateState({ step: 'email' });
         setChips([]);
-        botReply(`¡Mucho gusto, ${val}! 😊\n\nPara enviarte la cotización completa, ¿cuál es tu correo electrónico?`);
+        botReply('¡Genial! 😊\n\nPara enviarte la cotización completa, ¿cuál es tu correo electrónico?');
         break;
       }
       case 'email': {
@@ -69,73 +149,39 @@ export const useChatbot = () => {
       case 'phone': {
         const clean = val.replace(/[^0-9+\-\s]/g, '').trim();
         if (clean.length >= 7) {
-          updateState({ phone: clean, step: 'city' });
-          setChips(TOP_CITIES);
-          botReply('¡Excelente! 📱 Teléfono registrado.\n\n¿En qué ciudad de Colombia estás?');
+          updateState({ phone: clean, step: 'interest' });
+          // Save lead immediately after phone is collected (before interest answer)
+          // so contact info is not lost if the user abandons the flow
+          const current = stateRef.current;
+          if (current.lastQuote) {
+            await saveLead({
+              email: current.email,
+              phone: clean,
+              department: current.department,
+              city: current.city!,
+              bill: current.bill!,
+              panels: current.lastQuote.panels,
+              system_cost: current.lastQuote.systemCost,
+              payback: current.lastQuote.payback,
+              saving_25y: current.lastQuote.saving25y,
+              interested: false, // will be updated below if user confirms
+            });
+          }
+          setChips(['Sí, me interesa 🌟', 'No por ahora']);
+          botReply('¡Excelente! 📱 Teléfono registrado.\n\n¿Estás interesado en instalar este sistema? Un asesor te contactará para los detalles. 😊');
         } else {
           botReply('⚠️ Por favor ingresa un teléfono válido. Ejemplo: 3001234567');
         }
         break;
       }
-      case 'city': {
-        const city = findCity(val);
-        if (city) {
-          updateState({ city, step: 'bill' });
-          setChips(BILL_CHIPS);
-          const extra =
-            city !== BASE_CITY
-              ? '\n💡 Los costos de transporte y hospedaje desde Pereira se incluirán automáticamente.'
-              : '\n💡 ¡Instalación local en Pereira! Sin costos adicionales de desplazamiento.';
-          botReply(`¡Perfecto! Ciudad registrada: ${city} 📍${extra}\n\n¿Cuál es el valor promedio de tu factura mensual de electricidad? (Solo el número: ej 150000)`);
-        } else {
-          const list = Object.keys(CITIES).slice(0, 8).join(' · ');
-          botReply(`Lo siento, no encontré esa ciudad. 😕\n\nAlgunas ciudades disponibles:\n${list}\n\n¿Podrías escribir una de estas?`);
-          setChips(TOP_CITIES);
-        }
-        break;
-      }
-      case 'bill': {
-        const num = parseFloat(val.replace(/[^0-9.]/g, ''));
-        if (!isNaN(num) && num > 0) {
-          updateState({ bill: num, step: 'quote' });
-          setChips([]);
-          botReply('📊 Calculando tu cotización personalizada...\n\nUn momento por favor ⏳');
-          setTimeout(() => {
-            const current = stateRef.current;
-            if (!current.city) return;
-            const quote = calcSystem(num, current.city);
-            updateState({ lastQuote: quote });
-            addBotQuote({ quote, cityName: current.city, clientName: current.name!, clientEmail: current.email! });
-            setTimeout(() => {
-              updateState({ step: 'interest' });
-              setChips(['Sí, me interesa 🌟', 'No por ahora']);
-              addBot(`✅ ¡Cotización lista, ${current.name}!\n\n¿Estás interesado en instalar este sistema? Un asesor te contactará para los detalles. 😊`);
-            }, 600);
-          }, 1400);
-        } else {
-          botReply('Por favor ingresa un valor válido en pesos colombianos.\nEjemplo: 150000');
-        }
-        break;
-      }
       case 'interest': {
         const yes = /^(si|sí|yes|claro|ok|me interesa|quiero|adelante|perfecto|genial|bueno)/i.test(val);
-        if (s.lastQuote) {
-          saveLead({
-            name: s.name!,
-            email: s.email!,
-            phone: s.phone!,
-            city: s.city!,
-            billAmount: s.bill!,
-            interested: yes,
-            quoteData: { panels: s.lastQuote.panels, systemCost: s.lastQuote.systemCost, payback: s.lastQuote.payback },
-          });
-        }
         updateState({ step: 'restart' });
         setChips(['Nueva cotización', 'No, gracias']);
         if (yes) {
-          botReply(`🎉 ¡Excelente, ${s.name}! Tu interés fue registrado. Un asesor te contactará al ${s.phone} y a ${s.email}.\n\n¿Otra cotización?`);
+          botReply(`🎉 ¡Excelente! Tu interés fue registrado. Un asesor te contactará al ${s.phone} y a ${s.email}.\n\n¿Otra cotización?`);
         } else {
-          botReply(`Entendemos, ${s.name}. 💚 Si decides avanzar, aquí estaremos.\n\n¿Otra cotización?`);
+          botReply(`Entendemos. 💚 Si decides avanzar, aquí estaremos.\n\n¿Otra cotización?`);
         }
         break;
       }
@@ -143,11 +189,11 @@ export const useChatbot = () => {
         const yes = /^(si|sí|yes|nueva|otra|claro|ok|quiero|por favor)/i.test(val);
         if (yes) {
           stateRef.current = { ...initialState };
-          setChips([]);
-          botReply('¡Claro! 🌟 Iniciamos una nueva cotización.\n\n¿Cuál es tu nombre?');
+          setChips(BILL_CHIPS);
+          botReply('¡Claro! 🌟 Iniciamos una nueva cotización.\n\n¿Cuánto pagas de luz al mes? (Ejemplo: 150000)');
         } else {
           setChips(['Nueva cotización']);
-          botReply(`¡Gracias por usar nuestro cotizador, ${s.name}! 💚`);
+          botReply('¡Gracias por usar nuestro cotizador! 💚');
         }
         break;
       }
@@ -165,8 +211,9 @@ export const useChatbot = () => {
 
   const initWelcome = useCallback(() => {
     setTimeout(() => {
+      setChips(BILL_CHIPS);
       botReply(
-        '¡Hola! 👋 Soy tu asistente solar inteligente.\n\n⚡ Te ayudaré a calcular cuánto puedes ahorrar con paneles solares, incluyendo TODOS los costos reales de instalación desde Pereira hacia cualquier ciudad de Colombia.\n\n🌟 Para comenzar, ¿cuál es tu nombre?',
+        '¡Hola! 👋 ¿Cuánto pagas de luz al mes?\n\nDime el valor de tu factura y en 30 segundos te digo cuánto puedes ahorrar con paneles solares. ⚡',
         600
       );
     }, 600);

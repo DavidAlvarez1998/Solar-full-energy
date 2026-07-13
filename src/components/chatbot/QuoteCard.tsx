@@ -19,11 +19,10 @@ Chart.register(LineElement, PointElement, LineController, CategoryScale, LinearS
 interface Props {
   quote: QuoteResult;
   cityName: string;
-  clientName: string;
-  clientEmail: string;
+  clientEmail: string | null;
 }
 
-const QuoteCard = ({ quote: q, cityName, clientName, clientEmail }: Props) => {
+const QuoteCard = ({ quote: q, cityName, clientEmail }: Props) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
   const pbRef = useRef<HTMLDivElement>(null);
@@ -98,7 +97,7 @@ const QuoteCard = ({ quote: q, cityName, clientName, clientEmail }: Props) => {
   }, [q.payback]);
 
   const today = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
-  const waMsg = encodeURIComponent(`¡Hola! 👋 Vi la cotización solar para ${clientName} en ${cityName}.\nInversión estimada: ${fmtCOP(q.systemCost)} COP\nMe gustaría más información. 🌞`);
+  const waMsg = encodeURIComponent(`¡Hola! 👋 Vi la cotización solar en ${cityName}.\nInversión estimada: ${fmtCOP(q.systemCost)} COP\nMe gustaría más información. 🌞`);
 
   return (
     <div
@@ -120,8 +119,7 @@ const QuoteCard = ({ quote: q, cityName, clientName, clientEmail }: Props) => {
       <div className="p-5 space-y-4">
         {/* Client data */}
         <Section title="👤 Datos del cliente">
-          <Row label="Nombre" value={clientName} />
-          <Row label="Correo" value={clientEmail} />
+          {clientEmail && <Row label="Correo" value={clientEmail} />}
           <Row label="Ciudad" value={cityName} />
           <Row label="Fecha" value={today} />
         </Section>
@@ -199,9 +197,11 @@ const QuoteCard = ({ quote: q, cityName, clientName, clientEmail }: Props) => {
           >
             💬 Ir a WhatsApp · Hablar con un asesor
           </a>
-          <div className="text-center mt-2" style={{ fontSize: '0.72rem', color: '#64748b', fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.1em' }}>
-            📧 Cotización para {clientName} · {clientEmail}
-          </div>
+          {clientEmail && (
+            <div className="text-center mt-2" style={{ fontSize: '0.72rem', color: '#64748b', fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.1em' }}>
+              📧 Cotización enviada a · {clientEmail}
+            </div>
+          )}
         </div>
       </div>
     </div>
