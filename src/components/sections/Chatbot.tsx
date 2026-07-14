@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, KeyboardEvent } from 'react';
 import { useChatbot } from '../../hooks/useChatbot';
 import QuoteCard from '../chatbot/QuoteCard';
 import type { ChatMessage } from '../../types';
+import { Sun, MessageSquare, BarChart2, Lightbulb, Smartphone, Star } from 'lucide-react';
 
 const Chatbot = () => {
   const { messages, chips, isTyping, handleInput, initWelcome } = useChatbot();
@@ -33,7 +34,9 @@ const Chatbot = () => {
   return (
     <section className="animate-fadeIn">
       <div className="chat-title-block text-center mb-10" style={{ maxWidth: 700, margin: '0 auto 2.5rem' }}>
-        <h1 className="shimmer-text font-orbitron font-black tracking-wide mb-3" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)' }}>☀️ Cotiza tu Sistema Solar</h1>
+        <h1 className="shimmer-text font-orbitron font-black tracking-wide mb-3 flex items-center justify-center gap-2" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)' }}>
+          <Sun size={26} /> Cotiza tu Sistema Solar
+        </h1>
         <p className="text-text-muted font-medium chat-title-desc" style={{ fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}>
           Tu camino hacia la independencia energética comienza aquí. Obtén una cotización personalizada de nivel industrial en menos de 2 minutos.
         </p>
@@ -57,7 +60,9 @@ const Chatbot = () => {
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#FF5F57' }} />
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#FFBD2E' }} />
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#28CA41' }} />
-            <span className="ml-auto font-rajdhani text-text-muted uppercase tracking-widest" style={{ fontSize: '0.8rem' }}>☀️ Cotizador Solar</span>
+            <span className="ml-auto font-rajdhani text-text-muted uppercase tracking-widest flex items-center gap-1.5" style={{ fontSize: '0.8rem' }}>
+              <Sun size={13} /> Cotizador Solar
+            </span>
             <div className="flex items-center gap-1.5 text-xs ml-2 px-2 py-0.5 rounded-full" style={{ background: 'rgba(37,99,235,0.1)', border: '1px solid rgba(37,99,235,0.2)', color: '#2563eb' }}>
               <span className="w-1.5 h-1.5 rounded-full animate-blink" style={{ background: '#2563eb', display: 'inline-block' }} />
               En línea
@@ -72,7 +77,9 @@ const Chatbot = () => {
 
             {isTyping && (
               <div className="flex items-end gap-2">
-                <div className="flex items-center justify-center text-base" style={{ width: 32, height: 32, background: 'rgba(255,140,0,0.12)', border: '1px solid rgba(255,140,0,0.25)', borderRadius: '50%' }}>☀️</div>
+                <div className="flex items-center justify-center flex-shrink-0" style={{ width: 32, height: 32, background: 'rgba(255,140,0,0.12)', border: '1px solid rgba(255,140,0,0.25)', borderRadius: '50%', color: '#FF8C00' }}>
+                  <Sun size={16} />
+                </div>
                 <div className="flex gap-1 px-4 py-3 rounded-2xl" style={{ background: 'rgba(255,140,0,0.07)', border: '1px solid rgba(255,140,0,0.18)' }}>
                   {[0, 1, 2].map((i) => (
                     <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: '#facc15', animation: `blink 1.4s ${i * 0.2}s ease-in-out infinite` }} />
@@ -89,7 +96,7 @@ const Chatbot = () => {
           {/* Input */}
           <div className="flex items-center gap-2 p-3" style={{ borderTop: '1px solid var(--border)' }}>
             <div className="flex-1 flex items-center gap-2 rounded-xl px-3" style={{ background: 'var(--glass)', border: '1px solid var(--glass-border)' }}>
-              <span className="text-text-dim text-base">💬</span>
+              <MessageSquare size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
               <input
                 type="text"
                 value={input}
@@ -191,7 +198,9 @@ const MessageBubble = ({ msg }: { msg: ChatMessage }) => {
         >
           {msg.content}
         </div>
-        <div className="flex items-center justify-center flex-shrink-0 text-base rounded-full" style={{ width: 32, height: 32, background: 'rgba(37,99,235,0.15)', border: '1px solid rgba(37,99,235,0.3)' }}>👤</div>
+        <div className="flex items-center justify-center flex-shrink-0 rounded-full" style={{ width: 32, height: 32, background: 'rgba(37,99,235,0.15)', border: '1px solid rgba(37,99,235,0.3)', color: '#60a5fa' }}>
+          <MessageSquare size={15} />
+        </div>
       </div>
     );
   }
@@ -199,7 +208,9 @@ const MessageBubble = ({ msg }: { msg: ChatMessage }) => {
   if (msg.quoteData) {
     return (
       <div className="flex items-start gap-2">
-        <div className="flex items-center justify-center flex-shrink-0 text-base rounded-full" style={{ width: 32, height: 32, background: 'rgba(255,140,0,0.12)', border: '1px solid rgba(255,140,0,0.25)' }}>☀️</div>
+        <div className="flex items-center justify-center flex-shrink-0 rounded-full" style={{ width: 32, height: 32, background: 'rgba(255,140,0,0.12)', border: '1px solid rgba(255,140,0,0.25)', color: '#FF8C00' }}>
+          <Sun size={16} />
+        </div>
         <QuoteCard {...msg.quoteData} />
       </div>
     );
@@ -207,7 +218,9 @@ const MessageBubble = ({ msg }: { msg: ChatMessage }) => {
 
   return (
     <div className="flex items-end gap-2">
-      <div className="flex items-center justify-center flex-shrink-0 text-base rounded-full" style={{ width: 32, height: 32, background: 'rgba(255,140,0,0.12)', border: '1px solid rgba(255,140,0,0.25)' }}>☀️</div>
+      <div className="flex items-center justify-center flex-shrink-0 rounded-full" style={{ width: 32, height: 32, background: 'rgba(255,140,0,0.12)', border: '1px solid rgba(255,140,0,0.25)', color: '#FF8C00' }}>
+        <Sun size={16} />
+      </div>
       <div
         className="chat-bubble max-w-xs px-4 py-3 rounded-2xl rounded-bl-sm whitespace-pre-wrap"
         style={{ background: 'rgba(255,140,0,0.10)', border: '1px solid rgba(255,140,0,0.22)', fontSize: '0.88rem', color: 'var(--text)' }}
@@ -230,7 +243,9 @@ const InfoCard = ({ children, style }: { children: React.ReactNode; style?: Reac
 const ChatSidebar = () => (
   <div className="flex flex-col gap-4" style={{ position: 'sticky', top: '90px' }}>
     <InfoCard>
-      <h3 className="font-bold mb-3" style={{ fontSize: '0.9rem', color: 'var(--text)' }}>📊 ¿Cómo funciona?</h3>
+      <h3 className="font-bold mb-3 flex items-center gap-1.5" style={{ fontSize: '0.9rem', color: 'var(--text)' }}>
+        <BarChart2 size={15} /> ¿Cómo funciona?
+      </h3>
       <ul className="space-y-2">
         {['Indica tu factura', 'Selecciona tu departamento', 'Selecciona tu ciudad', 'Recibe tu cotización ✅', 'Comparte tu contacto', 'Un asesor te llama'].map((step, i) => (
           <li key={step} className="flex items-center gap-2 text-text-muted" style={{ fontSize: '0.82rem' }}>
@@ -242,7 +257,9 @@ const ChatSidebar = () => (
     </InfoCard>
 
     <InfoCard>
-      <h3 className="font-bold mb-3" style={{ fontSize: '0.9rem', color: 'var(--text)' }}>💡 Datos del Sistema</h3>
+      <h3 className="font-bold mb-3 flex items-center gap-1.5" style={{ fontSize: '0.9rem', color: 'var(--text)' }}>
+        <Lightbulb size={15} /> Datos del Sistema
+      </h3>
       <div className="space-y-2">
         <InfoRow label="Garantía sistema" value="25 años" green />
         <InfoRow label="Ciudades cubiertas" value="32 ciudades" />
@@ -251,7 +268,9 @@ const ChatSidebar = () => (
     </InfoCard>
 
     <InfoCard style={{ background: 'linear-gradient(135deg,rgba(37,211,102,0.08),rgba(18,140,126,0.04))', borderColor: 'rgba(37,211,102,0.2)' }}>
-      <h3 className="font-bold mb-2" style={{ fontSize: '0.9rem', color: 'var(--text)' }}>📲 ¿Prefieres hablar?</h3>
+      <h3 className="font-bold mb-2 flex items-center gap-1.5" style={{ fontSize: '0.9rem', color: 'var(--text)' }}>
+        <Smartphone size={15} /> ¿Prefieres hablar?
+      </h3>
       <p className="text-text-muted leading-relaxed mb-3" style={{ fontSize: '0.8rem' }}>Contáctanos directamente por WhatsApp y uno de nuestros asesores te atenderá personalmente.</p>
       <div className="flex flex-col gap-2">
         <WAButton href="https://wa.me/573217344209" label="Hablar con Asesor 1" gradient="linear-gradient(135deg,#2563eb,#60a5fa)" />
@@ -260,7 +279,9 @@ const ChatSidebar = () => (
     </InfoCard>
 
     <InfoCard>
-      <h3 className="font-bold mb-3" style={{ fontSize: '0.9rem', color: 'var(--text)' }}>🌟 ¿El sistema incluye?</h3>
+      <h3 className="font-bold mb-3 flex items-center gap-1.5" style={{ fontSize: '0.9rem', color: 'var(--text)' }}>
+        <Star size={15} /> ¿El sistema incluye?
+      </h3>
       <ul className="space-y-1.5">
         {['Paneles alta eficiencia', 'Inversor profesional', 'Sistema de montaje', 'Cableado completo', 'Instalación profesional', 'Garantía fabricante', 'Asesoría 6 meses'].map((item) => (
           <li key={item} className="flex items-center gap-2 text-text-muted" style={{ fontSize: '0.82rem' }}>
@@ -287,7 +308,7 @@ const WAButton = ({ href, label, gradient }: { href: string; label: string; grad
     className="flex items-center justify-center gap-2 no-underline text-white font-bold py-2.5 rounded-xl transition-all hover:-translate-y-0.5"
     style={{ background: gradient, fontSize: '0.85rem' }}
   >
-    💬 {label}
+    <MessageSquare size={14} /> {label}
   </a>
 );
 

@@ -2,18 +2,19 @@ import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useGallery } from '../../hooks/useGallery';
 import type { GalleryImage } from '../../types';
+import { Zap, Building2, Leaf, Sun, DollarSign, Camera, Megaphone, Search } from 'lucide-react';
 
 const stats = [
-  { emoji: '⚡', value: '847', label: 'Instalaciones' },
-  { emoji: '🏙️', value: '32', label: 'Ciudades' },
-  { emoji: '🌿', value: '1,240 t', label: 'CO₂ evitado' },
-  { emoji: '☀️', value: '4.2 MW', label: 'Potencia instalada' },
-  { emoji: '💰', value: '$12B', label: 'Ahorros generados' },
+  { icon: <Zap        size={24} />, value: '847',    label: 'Instalaciones'      },
+  { icon: <Building2  size={24} />, value: '32',     label: 'Ciudades'           },
+  { icon: <Leaf       size={24} />, value: '1,240 t',label: 'CO₂ evitado'        },
+  { icon: <Sun        size={24} />, value: '4.2 MW', label: 'Potencia instalada' },
+  { icon: <DollarSign size={24} />, value: '$12B',   label: 'Ahorros generados'  },
 ];
 
 const posts = [
-  { emoji: '🌞', text: 'Instalación residencial Pereira · 4 paneles · Ahorro garantizado', time: 'Hace 2 días · Instagram' },
-  { emoji: '⚡', text: 'Sistema industrial 50kW Medellín completo · Empresa textil', time: 'Hace 5 días · Facebook' },
+  { icon: <Sun size={28} />, text: 'Instalación residencial Pereira · 4 paneles · Ahorro garantizado', time: 'Hace 2 días · Instagram' },
+  { icon: <Zap size={28} />, text: 'Sistema industrial 50kW Medellín completo · Empresa textil',       time: 'Hace 5 días · Facebook' },
 ];
 
 const Instalados = () => {
@@ -50,14 +51,16 @@ const Instalados = () => {
     <>
     <section className="animate-fadeIn">
       <div className="mb-6">
-        <h1 className="shimmer-text font-orbitron font-black text-2xl tracking-wide">🔆 Servicios Instalados</h1>
+        <h1 className="shimmer-text font-orbitron font-black text-2xl tracking-wide flex items-center gap-2">
+          <Sun size={22} /> Servicios Instalados
+        </h1>
         <p className="text-text-muted mt-1 text-sm">Historial de instalaciones completadas a lo largo de Colombia</p>
       </div>
 
       {/* Gallery label */}
-      <GalLabel emoji="📸" text="Galería de instalaciones reales · Solar Full Energy" color="rgba(255,208,0,0.3)" />
+      <GalLabel icon={<Camera size={14} />} text="Galería de instalaciones reales · Solar Full Energy" color="rgba(255,208,0,0.3)" />
 
-      {/* Gallery — columnas CSS para acomodar cualquier proporción */}
+      {/* Gallery */}
       <div className="mb-8" style={{ columns: '280px', columnGap: '1.25rem' }}>
         {loading ? (
           <div style={{ color: '#94a3b8', textAlign: 'center', padding: '2rem' }}>Cargando galería...</div>
@@ -75,11 +78,13 @@ const Instalados = () => {
         className="glass-card mt-8 p-5"
         style={{ background: 'linear-gradient(135deg,rgba(255,140,0,0.07),rgba(16,185,129,0.04))', borderColor: 'rgba(255,208,0,0.18)' }}
       >
-        <div className="font-orbitron font-bold text-accent tracking-widest mb-4" style={{ fontSize: '0.8rem' }}>📣 NUESTRAS PUBLICACIONES</div>
+        <div className="font-orbitron font-bold text-accent tracking-widest mb-4 flex items-center gap-2" style={{ fontSize: '0.8rem' }}>
+          <Megaphone size={14} /> NUESTRAS PUBLICACIONES
+        </div>
         <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
           {posts.map((p) => (
             <div key={p.text} className="rounded-xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
-              <div className="text-3xl mb-1">{p.emoji}</div>
+              <div className="flex justify-center mb-1 text-accent">{p.icon}</div>
               <div className="text-text-muted" style={{ fontSize: '0.78rem' }}>{p.text}</div>
               <div className="text-text-dim mt-2" style={{ fontSize: '0.65rem' }}>{p.time}</div>
             </div>
@@ -102,7 +107,7 @@ const Instalados = () => {
       <div className="grid gap-4 mt-8" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
         {stats.map((s) => (
           <div key={s.label} className="stat-chip">
-            <span className="block text-2xl mb-1">{s.emoji}</span>
+            <div className="flex justify-center mb-1 text-accent">{s.icon}</div>
             <div className="font-orbitron font-bold text-accent" style={{ fontSize: '0.95rem' }}>{s.value}</div>
             <div className="text-text-muted uppercase tracking-widest mt-0.5" style={{ fontSize: '0.68rem' }}>{s.label}</div>
           </div>
@@ -110,7 +115,7 @@ const Instalados = () => {
       </div>
     </section>
 
-    {/* Lightbox — portal a document.body para escapar del stacking context del sidebar */}
+    {/* Lightbox */}
     {lightbox.open && createPortal(
       <div
         className="fixed inset-0 z-[9998]"
@@ -165,9 +170,9 @@ const Instalados = () => {
   );
 };
 
-const GalLabel = ({ emoji, text, color }: { emoji: string; text: string; color: string }) => (
-  <div className="flex items-center gap-3 font-orbitron font-bold text-accent uppercase tracking-widest mb-5" style={{ fontSize: '0.72rem' }}>
-    {emoji} {text}
+const GalLabel = ({ icon, text, color }: { icon: React.ReactNode; text: string; color: string }) => (
+  <div className="flex items-center gap-2 font-orbitron font-bold text-accent uppercase tracking-widest mb-5" style={{ fontSize: '0.72rem' }}>
+    {icon} {text}
     <span className="flex-1 h-px" style={{ background: `linear-gradient(90deg, ${color}, transparent)` }} />
   </div>
 );
@@ -202,8 +207,8 @@ const GalleryItem = ({ img, index, onOpen }: GalleryItemProps) => (
       className="transition-transform duration-500 group-hover:scale-105"
       onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
     />
-    <div className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'rgba(255,208,0,0.18)', border: '1px solid rgba(255,208,0,0.4)', backdropFilter: 'blur(6px)' }}>
-      🔍
+    <div className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'rgba(255,208,0,0.18)', border: '1px solid rgba(255,208,0,0.4)', backdropFilter: 'blur(6px)', color: '#FFD700' }}>
+      <Search size={14} />
     </div>
     <div className="absolute bottom-0 left-0 right-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(4,10,25,0.88) 100%)' }}>
       <div className="font-bold text-white" style={{ fontSize: '0.9rem' }}>{img.title}</div>

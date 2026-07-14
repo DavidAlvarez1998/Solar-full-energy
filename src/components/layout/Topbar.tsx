@@ -1,6 +1,7 @@
 import type { SectionId } from '../../types';
 import { SECTION_META } from '../../data/navigation';
 import SolarIcon from '../icons/SolarIcon';
+import { Mail } from 'lucide-react';
 
 interface TopbarProps {
   activeSection: SectionId;
@@ -88,7 +89,7 @@ const Topbar = ({ activeSection, theme, onThemeToggle, onMenuToggle, isMobile }:
               whiteSpace: 'nowrap',
             }}
           >
-            ✉️ Email
+            <Mail size={13} /> Email
           </a>
         )}
 

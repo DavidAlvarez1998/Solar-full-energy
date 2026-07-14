@@ -3,12 +3,18 @@ import { useAdminSession } from '../../hooks/useAdminSession';
 import Login from './Login';
 import Leads from './Leads';
 import Images from './Images';
+import { ClipboardList, Images as ImagesIcon, Settings2 } from 'lucide-react';
 
 type AdminTab = 'leads' | 'images';
 
 const TAB_LABELS: Record<AdminTab, string> = {
-  leads:  '📋 Prospectos',
-  images: '🖼️ Imágenes',
+  leads:  'Prospectos',
+  images: 'Imágenes',
+};
+
+const TAB_ICONS: Record<AdminTab, React.ReactNode> = {
+  leads:  <ClipboardList size={15} />,
+  images: <ImagesIcon    size={15} />,
 };
 
 const Admin = () => {
@@ -50,8 +56,8 @@ const Admin = () => {
         }}
       >
         <div>
-          <h1 style={{ color: '#f1f5f9', fontSize: '1.4rem', fontWeight: 700, margin: 0 }}>
-            ⚙️ Panel de Administración
+          <h1 style={{ color: '#f1f5f9', fontSize: '1.4rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Settings2 size={20} /> Panel de Administración
           </h1>
           <p style={{ color: '#64748b', fontSize: '0.82rem', margin: '0.25rem 0 0' }}>
             {session.user.email}
@@ -91,6 +97,7 @@ const Admin = () => {
             key={tab}
             onClick={() => setActiveTab(tab)}
             style={{
+              display: 'flex', alignItems: 'center', gap: '0.4rem',
               padding: '0.6rem 1.2rem',
               borderRadius: '8px 8px 0 0',
               border: 'none',
@@ -103,7 +110,7 @@ const Admin = () => {
               transition: 'all 0.2s',
             }}
           >
-            {TAB_LABELS[tab]}
+            {TAB_ICONS[tab]} {TAB_LABELS[tab]}
           </button>
         ))}
       </div>

@@ -13,6 +13,10 @@ import {
 import type { QuoteResult } from '../../types';
 import { fmtCOP } from '../../utils/chatbot';
 import { BASE_CITY, WA_NUMBER } from '../../data/cities';
+import {
+  Sun, User, Zap, Wrench, DollarSign, TrendingUp,
+  Lightbulb, ClipboardList, MessageSquare, Mail, MapPin, CheckCircle2,
+} from 'lucide-react';
 
 Chart.register(LineElement, PointElement, LineController, CategoryScale, LinearScale, Legend, Tooltip, Filler);
 
@@ -111,35 +115,37 @@ const QuoteCard = ({ quote: q, cityName, clientEmail }: Props) => {
     >
       {/* Header */}
       <div className="flex items-center gap-3 px-5 py-3" style={{ background: 'linear-gradient(90deg, rgba(255,179,0,0.15), rgba(37,99,235,0.1))', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <span className="text-xl">🌞</span>
+        <Sun size={18} strokeWidth={1.75} style={{ color: '#FFD700', flexShrink: 0 }} />
         <span className="font-orbitron font-bold text-white tracking-wide" style={{ fontSize: '0.82rem' }}>Cotización Solar Personalizada</span>
-        <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,208,0,0.12)', color: '#facc15', border: '1px solid rgba(255,208,0,0.25)' }}>📍 {cityName}</span>
+        <span className="ml-auto text-xs px-2 py-0.5 rounded-full flex items-center gap-1" style={{ background: 'rgba(255,208,0,0.12)', color: '#facc15', border: '1px solid rgba(255,208,0,0.25)' }}>
+          <MapPin size={10} /> {cityName}
+        </span>
       </div>
 
       <div className="p-5 space-y-4">
         {/* Client data */}
-        <Section title="👤 Datos del cliente">
+        <Section title={<><User size={12} /> Datos del cliente</>}>
           {clientEmail && <Row label="Correo" value={clientEmail} />}
           <Row label="Ciudad" value={cityName} />
           <Row label="Fecha" value={today} />
         </Section>
 
         {/* Energy */}
-        <Section title="⚡ Consumo energético">
+        <Section title={<><Zap size={12} /> Consumo energético</>}>
           <Row label="Consumo mensual" value={`${Math.round(q.kwh)} kWh`} highlight />
           <Row label={`Tarifa kWh en ${cityName}`} value={fmtCOP(q.costKwh)} />
           <Row label="Factura mensual actual" value={fmtCOP(q.monthly)} />
         </Section>
 
         {/* System */}
-        <Section title="☀️ Sistema Solar">
+        <Section title={<><Sun size={12} /> Sistema Solar</>}>
           <Row label="Paneles requeridos" value={`${q.panels} paneles`} highlight />
           <Row label="Costo paneles" value={fmtCOP(q.panelCost)} />
           <Row label="Mano de obra" value={fmtCOP(q.labor)} />
         </Section>
 
         {/* Installation */}
-        <Section title={`🔧 Instalación (desde ${BASE_CITY})`}>
+        <Section title={<><Wrench size={12} /> Instalación (desde {BASE_CITY})</>}>
           {cityName !== BASE_CITY ? (
             <>
               <Row label="Logística y Desplazamiento" value={fmtCOP(q.transport + q.lodging + q.food)} />
@@ -155,33 +161,35 @@ const QuoteCard = ({ quote: q, cityName, clientEmail }: Props) => {
 
         {/* Total */}
         <div className="rounded-xl px-4 py-3 text-center" style={{ background: 'rgba(255,208,0,0.08)', border: '1px solid rgba(255,208,0,0.2)' }}>
-          <div className="text-text-muted mb-1" style={{ fontSize: '0.75rem' }}>💵 Inversión total del sistema</div>
+          <div className="text-text-muted mb-1 flex items-center justify-center gap-1" style={{ fontSize: '0.75rem' }}>
+            <DollarSign size={12} /> Inversión total del sistema
+          </div>
           <div className="font-orbitron font-black text-accent" style={{ fontSize: '1.4rem' }}>{fmtCOP(q.systemCost)} COP</div>
         </div>
 
         {/* Benefits */}
-        <Section title="💚 Beneficios económicos">
+        <Section title={<><TrendingUp size={12} /> Beneficios económicos</>}>
           <Row label="Ahorro mensual" value={fmtCOP(q.monthly)} green />
           <Row label="Ahorro anual" value={fmtCOP(q.yearlySaving)} green />
           <Row label="Recuperación de inversión" value={`${q.payback.toFixed(1)} años`} highlight />
           <div className="mt-2 rounded-full overflow-hidden" style={{ height: 6, background: 'rgba(255,255,255,0.06)' }}>
             <div ref={pbRef} className="h-full rounded-full transition-all duration-700" style={{ width: '0%', background: 'linear-gradient(90deg, #2563eb, #facc15)' }} />
           </div>
-          <Row label="💡 Ahorro total a 25 años" value={fmtCOP(q.saving25y)} green bold />
+          <Row label={<><Lightbulb size={11} /> Ahorro total a 25 años</>} value={fmtCOP(q.saving25y)} green bold />
         </Section>
 
         {/* Chart */}
-        <Section title="📈 Proyección ahorro acumulado (25 años)">
+        <Section title={<><TrendingUp size={12} /> Proyección ahorro acumulado (25 años)</>}>
           <div style={{ height: 180 }}>
             <canvas ref={chartRef} />
           </div>
         </Section>
 
         {/* What's included */}
-        <Section title="📋 El sistema incluye">
+        <Section title={<><ClipboardList size={12} /> El sistema incluye</>}>
           <div className="grid gap-1" style={{ gridTemplateColumns: '1fr 1fr', fontSize: '0.8rem', color: '#94a3b8' }}>
             {['Paneles alta eficiencia', 'Inversor profesional', 'Sistema de montaje', 'Cableado completo', 'Transporte desde Pereira', 'Garantía fabricante', 'Instalación profesional', 'Asesoría 6 meses'].map((item) => (
-              <span key={item}>✅ {item}</span>
+              <span key={item} className="flex items-center gap-1"><CheckCircle2 size={11} style={{ color: '#4ade80', flexShrink: 0 }} /> {item}</span>
             ))}
           </div>
         </Section>
@@ -195,11 +203,11 @@ const QuoteCard = ({ quote: q, cityName, clientEmail }: Props) => {
             className="flex items-center justify-center gap-2 no-underline text-white font-bold w-full py-3 rounded-xl transition-all hover:-translate-y-0.5"
             style={{ background: 'linear-gradient(135deg, #25D366, #128C7E)', fontSize: '0.9rem', boxShadow: '0 4px 16px rgba(37,211,102,0.35)' }}
           >
-            💬 Ir a WhatsApp · Hablar con un asesor
+            <MessageSquare size={16} /> Ir a WhatsApp · Hablar con un asesor
           </a>
           {clientEmail && (
-            <div className="text-center mt-2" style={{ fontSize: '0.72rem', color: '#64748b', fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.1em' }}>
-              📧 Cotización enviada a · {clientEmail}
+            <div className="text-center mt-2 flex items-center justify-center gap-1" style={{ fontSize: '0.72rem', color: '#64748b', fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.1em' }}>
+              <Mail size={11} /> Cotización enviada a · {clientEmail}
             </div>
           )}
         </div>
@@ -208,18 +216,18 @@ const QuoteCard = ({ quote: q, cityName, clientEmail }: Props) => {
   );
 };
 
-const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+const Section = ({ title, children }: { title: React.ReactNode; children: React.ReactNode }) => (
   <div className="pb-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-    <div className="font-semibold text-cyan mb-2" style={{ fontSize: '0.78rem', letterSpacing: '0.06em' }}>{title}</div>
+    <div className="font-semibold text-cyan mb-2 flex items-center gap-1.5" style={{ fontSize: '0.78rem', letterSpacing: '0.06em' }}>{title}</div>
     <div className="space-y-1">{children}</div>
   </div>
 );
 
-interface RowProps { label: string; value: string; highlight?: boolean; green?: boolean; bold?: boolean; }
+interface RowProps { label: React.ReactNode; value: string; highlight?: boolean; green?: boolean; bold?: boolean; }
 
 const Row = ({ label, value, highlight, green, bold }: RowProps) => (
   <div className="flex items-center justify-between gap-2" style={{ fontSize: '0.82rem' }}>
-    <span className="text-text-muted">{label}</span>
+    <span className="text-text-muted flex items-center gap-1">{label}</span>
     <span
       className={bold ? 'font-extrabold' : 'font-medium'}
       style={{

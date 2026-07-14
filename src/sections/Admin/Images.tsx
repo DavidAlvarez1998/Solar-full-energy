@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '../../lib/supabase';
+import { Trash2 } from 'lucide-react';
 
 interface StorageItem {
   name: string;
@@ -117,7 +118,7 @@ const Images = () => {
             onClick={e => e.stopPropagation()}
             style={{ background: '#0d121f', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 16, padding: '2rem', maxWidth: 380, width: '90%', boxShadow: '0 0 40px rgba(239,68,68,0.15)' }}
           >
-            <div style={{ fontSize: '2rem', textAlign: 'center', marginBottom: '0.75rem' }}>🗑️</div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem', color: '#f87171' }}><Trash2 size={32} /></div>
             <h3 style={{ color: '#f1f5f9', fontSize: '1rem', fontWeight: 700, margin: '0 0 0.5rem', textAlign: 'center' }}>
               ¿Eliminar imagen?
             </h3>
