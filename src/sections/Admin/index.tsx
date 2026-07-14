@@ -2,14 +2,12 @@ import { useState } from 'react';
 import { useAdminSession } from '../../hooks/useAdminSession';
 import Login from './Login';
 import Leads from './Leads';
-import Content from './Content';
 import Images from './Images';
 
-type AdminTab = 'leads' | 'content' | 'images';
+type AdminTab = 'leads' | 'images';
 
 const TAB_LABELS: Record<AdminTab, string> = {
-  leads: '📋 Prospectos',
-  content: '✏️ Contenido',
+  leads:  '📋 Prospectos',
   images: '🖼️ Imágenes',
 };
 
@@ -86,7 +84,6 @@ const Admin = () => {
           gap: '0.25rem',
           marginBottom: '1.5rem',
           borderBottom: '1px solid rgba(255,255,255,0.08)',
-          paddingBottom: '0',
         }}
       >
         {(Object.keys(TAB_LABELS) as AdminTab[]).map(tab => (
@@ -121,8 +118,7 @@ const Admin = () => {
           border: '1px solid rgba(37,99,235,0.15)',
         }}
       >
-        {activeTab === 'leads' && <Leads />}
-        {activeTab === 'content' && <Content />}
+        {activeTab === 'leads'  && <Leads />}
         {activeTab === 'images' && <Images />}
       </div>
     </div>
