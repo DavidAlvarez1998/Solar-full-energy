@@ -5,6 +5,16 @@ import WhatsAppIcon from '../icons/WhatsAppIcon';
 import InstagramIcon from '../icons/InstagramIcon';
 import FacebookIcon from '../icons/FacebookIcon';
 import EmailIcon from '../icons/EmailIcon';
+import { LayoutDashboard, Zap, Images, Share2, Sun, Settings2 } from 'lucide-react';
+
+const NAV_ICONS: Record<string, React.ReactNode> = {
+  dashboard:  <LayoutDashboard size={18} strokeWidth={1.75} />,
+  servicios:  <Zap            size={18} strokeWidth={1.75} />,
+  instalados: <Images         size={18} strokeWidth={1.75} />,
+  redes:      <Share2         size={18} strokeWidth={1.75} />,
+  chatbot:    <Sun            size={18} strokeWidth={1.75} />,
+  admin:      <Settings2      size={18} strokeWidth={1.75} />,
+};
 
 interface SidebarProps {
   activeSection: SectionId;
@@ -292,7 +302,7 @@ const NavButton = ({ item, active, collapsed, onClick }: NavButtonProps) => (
     aria-label={item.label}
     aria-current={active ? 'page' : undefined}
   >
-    <div className="flex justify-center flex-shrink-0 text-lg" style={{ width: 24 }}>{item.icon}</div>
+    <div className="flex justify-center flex-shrink-0" style={{ width: 24 }}>{NAV_ICONS[item.id] ?? item.icon}</div>
     {!collapsed && <span>{item.label}</span>}
     {!collapsed && item.badge && (
       <span
