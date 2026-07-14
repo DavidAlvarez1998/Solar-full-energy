@@ -149,7 +149,6 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
           lineHeight: 1.75, maxWidth: 520, marginBottom: '2rem',
         }}>
           Sistemas fotovoltaicos instalados en 32 ciudades de Colombia.
-          <br />Garantizados por 25 años, rentables desde el primer año.
         </p>
 
         {/* CTAs */}
@@ -194,14 +193,14 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
     {/* ── METRICS ── */}
     <div style={{
       display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
-      background: '#0f172a',
-      border: '1px solid rgba(255,255,255,0.07)',
+      background: 'var(--surface)',
+      border: '1px solid var(--border)',
       borderRadius: 16, overflow: 'hidden',
     }}>
       {metrics.map((m, i) => (
         <div key={m.label} style={{
           padding: '1.25rem 0.75rem', textAlign: 'center',
-          borderRight: i < metrics.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+          borderRight: i < metrics.length - 1 ? '1px solid var(--border)' : 'none',
           position: 'relative',
         }}>
           <div style={{
@@ -214,7 +213,7 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
             lineHeight: 1.15, marginTop: '0.5rem',
           }}>{m.value}</div>
           <div style={{
-            fontSize: '0.63rem', color: '#475569',
+            fontSize: '0.63rem', color: 'var(--text-muted)',
             textTransform: 'uppercase' as const, letterSpacing: '0.09em', marginTop: '0.3rem',
           }}>{m.label}</div>
         </div>
@@ -240,18 +239,18 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
           onMouseLeave={e => {
             const el = e.currentTarget as HTMLButtonElement;
             el.style.transform = '';
-            el.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
-            el.style.borderColor = 'rgba(255,255,255,0.07)';
+            el.style.boxShadow = '0 4px 16px rgba(0,0,0,0.1)';
+            el.style.borderColor = 'var(--border)';
           }}
           style={{
             display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
             textAlign: 'left', padding: '0',
-            background: '#0f172a',
-            border: '1px solid rgba(255,255,255,0.07)',
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
             borderRadius: 18, overflow: 'hidden',
             cursor: 'pointer',
             transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
           }}>
           {/* Color stripe */}
           <div style={{ width: '100%', height: 3, background: card.gradient }} />
@@ -271,10 +270,10 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
             }}>
               {card.icon}
             </div>
-            <div style={{ fontWeight: 700, fontSize: '1rem', color: '#f1f5f9', marginBottom: '0.45rem' }}>
+            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text)', marginBottom: '0.45rem' }}>
               {card.title}
             </div>
-            <div style={{ fontSize: '0.79rem', color: '#64748b', lineHeight: 1.65, flex: 1, marginBottom: '1.1rem' }}>
+            <div style={{ fontSize: '0.79rem', color: 'var(--text-muted)', lineHeight: 1.65, flex: 1, marginBottom: '1.1rem' }}>
               {card.desc}
             </div>
             <div style={{
@@ -292,28 +291,24 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
     <button
       onClick={() => onNavigate('servicios')}
       onMouseEnter={e => {
-        const el = e.currentTarget as HTMLButtonElement;
-        el.style.background = '#131f35';
-        el.style.borderColor = 'rgba(37,99,235,0.35)';
+        (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(37,99,235,0.35)';
       }}
       onMouseLeave={e => {
-        const el = e.currentTarget as HTMLButtonElement;
-        el.style.background = '#0f172a';
-        el.style.borderColor = 'rgba(255,255,255,0.07)';
+        (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--border)';
       }}
       style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem',
         width: '100%', textAlign: 'left', padding: '1.1rem 1.4rem',
-        background: '#0f172a', border: '1px solid rgba(255,255,255,0.07)',
+        background: 'var(--surface)', border: '1px solid var(--border)',
         borderRadius: 14, cursor: 'pointer',
-        transition: 'background 0.18s ease, border-color 0.18s ease',
-        color: '#f1f5f9',
+        transition: 'border-color 0.18s ease',
+        color: 'var(--text)',
       }}>
       <div>
-        <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#f1f5f9', marginBottom: '0.2rem' }}>
+        <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text)', marginBottom: '0.2rem' }}>
           Nuestros Servicios
         </div>
-        <div style={{ fontSize: '0.78rem', color: '#475569' }}>
+        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
           Consultoría · Diseño · Instalación · Soporte post-venta
         </div>
       </div>
