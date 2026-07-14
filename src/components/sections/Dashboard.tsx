@@ -37,10 +37,10 @@ const ArrowIcon = () => (
 
 /* ── Data ── */
 const metrics = [
-  { value: '32',      label: 'Ciudades',       color: '#3b82f6' },
-  { value: '847+',    label: 'Instalaciones',  color: '#FFD700' },
-  { value: '25 años', label: 'Garantía',       color: '#10b981' },
-  { value: '1.240 t', label: 'CO₂ evitado',    color: '#f97316' },
+  { value: '32',      label: 'Ciudades',      color: '#3b82f6' },
+  { value: '847+',    label: 'Instalaciones', color: '#FFD700' },
+  { value: '4.2 MW',  label: 'Potencia',      color: '#10b981' },
+  { value: '1.240 t', label: 'CO₂ evitado',   color: '#f97316' },
 ];
 
 const actions = [
