@@ -55,6 +55,20 @@ export const useChatbot = () => {
   const processInput = useCallback(async (val: string) => {
     const s = stateRef.current;
 
+    const runQuoteForCity = (cityName: string, bill: number) => {
+      setChips([]);
+      botReply('📊 Calculando tu cotización personalizada...\n\nUn momento por favor ⏳');
+      setTimeout(() => {
+        const quote = calcSystem(bill, cityName);
+        updateState({ lastQuote: quote });
+        addBotQuote({ quote, cityName, clientEmail: stateRef.current.email });
+        setTimeout(() => {
+          setChips(['Sí, quiero la cotización formal 🌟', 'No por ahora']);
+          addBot('✅ ¡Cotización lista!\n\n¿Te gustaría que un asesor te contacte con la cotización formal y más detalles? 😊');
+        }, 600);
+      }, 1400);
+    };
+
     switch (s.step) {
       case 'welcome': {
         // welcome step: user submits bill amount directly (RF-09)
@@ -90,10 +104,18 @@ export const useChatbot = () => {
           return nd.includes(ni) || ni.includes(nd);
         }) ?? null;
         if (found) {
-          updateState({ department: found, step: 'city' });
           const cities = getCitiesByDepartment(found);
-          setChips(cities);
-          botReply(`Departamento: ${found} 📍\n\n¿En qué municipio estás? Selecciona o escribe tu ciudad.`);
+          if (cities.length === 1) {
+            const autoCity = cities[0];
+            updateState({ department: found, city: autoCity, step: 'quote' });
+            setChips([]);
+            botReply(`Departamento: ${found} 📍  ·  Municipio: ${autoCity} 🏙️`);
+            setTimeout(() => runQuoteForCity(autoCity, s.bill!), 900);
+          } else {
+            updateState({ department: found, step: 'city' });
+            setChips(cities);
+            botReply(`Departamento: ${found} 📍\n\n¿En qué municipio estás? Selecciona o escribe tu ciudad.`);
+          }
         } else {
           setChips(DEPARTMENT_CHIPS);
           botReply('No encontré ese departamento. 😕\n\nPor favor selecciona uno de la lista o escríbelo correctamente.');
@@ -104,19 +126,7 @@ export const useChatbot = () => {
         const city = findCity(val, s.department);
         if (city) {
           updateState({ city, step: 'quote' });
-          setChips([]);
-          botReply('📊 Calculando tu cotización personalizada...\n\nUn momento por favor ⏳');
-          setTimeout(() => {
-            const current = stateRef.current;
-            if (!current.city || current.bill === null) return;
-            const quote = calcSystem(current.bill, current.city);
-            updateState({ lastQuote: quote });
-            addBotQuote({ quote, cityName: current.city, clientEmail: current.email });
-            setTimeout(() => {
-              setChips(['Sí, quiero la cotización formal 🌟', 'No por ahora']);
-              addBot(`✅ ¡Cotización lista!\n\n¿Te gustaría que un asesor te contacte con la cotización formal y más detalles? 😊`);
-            }, 600);
-          }, 1400);
+          runQuoteForCity(city, s.bill!);
         } else {
           const dept = s.department;
           const availableCities = dept ? getCitiesByDepartment(dept) : [];

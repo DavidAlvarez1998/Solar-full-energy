@@ -70,40 +70,6 @@ const Instalados = () => {
         )}
       </div>
 
-      {/* Video label */}
-      <GalLabel emoji="🎬" text="Video · Solar Full Energy en acción" color="rgba(16,185,129,0.3)" />
-
-      {/* Video */}
-      <div
-        className="rounded-2xl overflow-hidden relative"
-        style={{
-          border: '1.5px solid rgba(16,185,129,0.25)',
-          boxShadow: '0 0 40px rgba(16,185,129,0.12), 0 10px 40px rgba(0,0,0,0.55)',
-          background: '#000',
-          animation: 'panelGlow 4s ease-in-out infinite',
-        }}
-      >
-        <span
-          className="absolute top-4 left-4 z-10 flex items-center gap-1.5 font-semibold font-rajdhani uppercase tracking-widest"
-          style={{
-            background: 'rgba(16,185,129,0.2)',
-            border: '1px solid rgba(16,185,129,0.4)',
-            borderRadius: 20,
-            padding: '0.3rem 0.85rem',
-            fontSize: '0.72rem',
-            color: '#2563eb',
-            backdropFilter: 'blur(8px)',
-          }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full animate-blink" style={{ background: '#2563eb', display: 'inline-block' }} />
-          ▶ Instalación real
-        </span>
-        <video controls preload="metadata" style={{ width: '100%', display: 'block', maxHeight: 520, objectFit: 'contain', background: '#000' }}>
-          <source src="/video1.mp4" type="video/mp4" />
-          Tu navegador no soporta reproducción de video.
-        </video>
-      </div>
-
       {/* Posts preview */}
       <div
         className="glass-card mt-8 p-5"

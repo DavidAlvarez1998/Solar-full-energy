@@ -17,7 +17,7 @@ const Chatbot = () => {
   }, [initWelcome]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, [messages, isTyping]);
 
   const send = () => {
@@ -32,9 +32,9 @@ const Chatbot = () => {
 
   return (
     <section className="animate-fadeIn">
-      <div className="text-center mb-10" style={{ maxWidth: 700, margin: '0 auto 2.5rem' }}>
+      <div className="chat-title-block text-center mb-10" style={{ maxWidth: 700, margin: '0 auto 2.5rem' }}>
         <h1 className="shimmer-text font-orbitron font-black tracking-wide mb-3" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)' }}>☀️ Cotiza tu Sistema Solar</h1>
-        <p className="text-text-muted font-medium" style={{ fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}>
+        <p className="text-text-muted font-medium chat-title-desc" style={{ fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}>
           Tu camino hacia la independencia energética comienza aquí. Obtén una cotización personalizada de nivel industrial en menos de 2 minutos.
         </p>
       </div>
@@ -44,7 +44,7 @@ const Chatbot = () => {
         <div
           className="rounded-3xl overflow-hidden flex flex-col animate-panelGlow chat-panel-height"
           style={{
-            height: 750,
+            height: 'clamp(480px, calc(100svh - 250px), 750px)',
             background: 'var(--glass)',
             backdropFilter: 'blur(20px)',
             border: '2px solid rgba(37,99,235,0.3)',
@@ -52,8 +52,8 @@ const Chatbot = () => {
             position: 'relative',
           }}
         >
-          {/* Mac-style topbar */}
-          <div className="flex items-center gap-2 px-5 py-3" style={{ background: 'linear-gradient(90deg, rgba(255,179,0,0.12), rgba(37,99,235,0.08))', borderBottom: '1px solid var(--border)' }}>
+          {/* Mac-style topbar — oculto en mobile */}
+          <div className="chat-topbar flex items-center gap-2 px-5 py-3" style={{ background: 'linear-gradient(90deg, rgba(255,179,0,0.12), rgba(37,99,235,0.08))', borderBottom: '1px solid var(--border)' }}>
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#FF5F57' }} />
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#FFBD2E' }} />
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#28CA41' }} />
@@ -83,27 +83,8 @@ const Chatbot = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Chips */}
-          {chips.length > 0 && (
-            <div className="flex flex-wrap gap-2 px-4 pb-2">
-              {chips.map((chip) => (
-                <button
-                  key={chip}
-                  onClick={() => handleInput(chip)}
-                  className="text-accent border font-medium transition-all hover:bg-teal/20 cursor-pointer"
-                  style={{
-                    fontSize: '0.78rem',
-                    background: 'rgba(37,99,235,0.06)',
-                    border: '1px solid rgba(37,99,235,0.25)',
-                    borderRadius: 20,
-                    padding: '0.3rem 0.85rem',
-                  }}
-                >
-                  {chip}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Chips / Search */}
+          {chips.length > 0 && <ChipZone chips={chips} onSelect={handleInput} />}
 
           {/* Input */}
           <div className="flex items-center gap-2 p-3" style={{ borderTop: '1px solid var(--border)' }}>
@@ -134,10 +115,69 @@ const Chatbot = () => {
           </div>
         </div>
 
-        {/* Sidebar info */}
-        <ChatSidebar />
+        {/* Sidebar info — oculto en mobile */}
+        <div className="chat-sidebar-wrap">
+          <ChatSidebar />
+        </div>
       </div>
     </section>
+  );
+};
+
+const SEARCH_THRESHOLD = 6;
+
+const ChipZone = ({ chips, onSelect }: { chips: string[]; onSelect: (v: string) => void }) => {
+  const [q, setQ] = useState('');
+
+  useEffect(() => { setQ(''); }, [chips]);
+
+  const searchable = chips.length > SEARCH_THRESHOLD;
+  const norm = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const visible = searchable && q ? chips.filter(c => norm(c).includes(norm(q))) : chips;
+
+  return (
+    <div className="px-4 pb-3 pt-2" style={{ borderTop: '1px solid var(--border)' }}>
+      {searchable && (
+        <input
+          type="text"
+          value={q}
+          onChange={e => setQ(e.target.value)}
+          placeholder="🔍 Filtrar departamento..."
+          autoComplete="off"
+          className="w-full outline-none rounded-xl px-3 py-2 mb-2"
+          style={{
+            fontSize: '0.82rem',
+            color: 'var(--text)',
+            background: 'rgba(37,99,235,0.06)',
+            border: '1px solid rgba(37,99,235,0.2)',
+          }}
+        />
+      )}
+      <div
+        className="flex flex-wrap gap-2"
+        style={searchable ? { maxHeight: '7.5rem', overflowY: 'auto' } : undefined}
+      >
+        {visible.map(chip => (
+          <button
+            key={chip}
+            onClick={() => { setQ(''); onSelect(chip); }}
+            className="text-accent font-medium transition-all hover:opacity-80 cursor-pointer"
+            style={{
+              fontSize: '0.78rem',
+              background: 'rgba(37,99,235,0.06)',
+              border: '1px solid rgba(37,99,235,0.25)',
+              borderRadius: 20,
+              padding: '0.3rem 0.85rem',
+            }}
+          >
+            {chip}
+          </button>
+        ))}
+        {visible.length === 0 && q && (
+          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', padding: '0.2rem 0' }}>Sin resultados</span>
+        )}
+      </div>
+    </div>
   );
 };
 
@@ -146,7 +186,7 @@ const MessageBubble = ({ msg }: { msg: ChatMessage }) => {
     return (
       <div className="flex items-end justify-end gap-2">
         <div
-          className="max-w-xs px-4 py-3 rounded-2xl rounded-br-sm text-white whitespace-pre-wrap"
+          className="chat-bubble max-w-xs px-4 py-3 rounded-2xl rounded-br-sm text-white whitespace-pre-wrap"
           style={{ background: 'linear-gradient(135deg, #1e40af, #2563eb)', fontSize: '0.88rem', boxShadow: '0 4px 12px rgba(37,99,235,0.25)' }}
         >
           {msg.content}
@@ -169,7 +209,7 @@ const MessageBubble = ({ msg }: { msg: ChatMessage }) => {
     <div className="flex items-end gap-2">
       <div className="flex items-center justify-center flex-shrink-0 text-base rounded-full" style={{ width: 32, height: 32, background: 'rgba(255,140,0,0.12)', border: '1px solid rgba(255,140,0,0.25)' }}>☀️</div>
       <div
-        className="max-w-xs px-4 py-3 rounded-2xl rounded-bl-sm whitespace-pre-wrap"
+        className="chat-bubble max-w-xs px-4 py-3 rounded-2xl rounded-bl-sm whitespace-pre-wrap"
         style={{ background: 'rgba(255,140,0,0.10)', border: '1px solid rgba(255,140,0,0.22)', fontSize: '0.88rem', color: 'var(--text)' }}
       >
         {msg.content}

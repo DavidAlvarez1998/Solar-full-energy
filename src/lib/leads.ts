@@ -16,8 +16,6 @@ export interface InsertLeadPayload {
   interested: boolean;
 }
 
-const USE_SUPABASE = import.meta.env.VITE_USE_SUPABASE !== 'false';
-
 const mirrorToLocalStorage = (payload: InsertLeadPayload): void => {
   try {
     const raw = localStorage.getItem('solar_leads');
@@ -32,11 +30,6 @@ const mirrorToLocalStorage = (payload: InsertLeadPayload): void => {
 };
 
 export const insertLead = async (payload: InsertLeadPayload): Promise<void> => {
-  if (!USE_SUPABASE) {
-    mirrorToLocalStorage(payload);
-    return;
-  }
-
   const { error } = await supabase.from('leads').insert({
     email: payload.email,
     phone: payload.phone,

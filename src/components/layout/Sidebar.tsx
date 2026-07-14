@@ -162,7 +162,7 @@ const Sidebar = ({ activeSection, collapsed, isMobile, mobileOpen, onNavigate, o
 
         {/* ── Navigation ── */}
         <nav
-          className="flex-1 overflow-y-auto overflow-x-hidden"
+          className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col"
           style={{ padding: '0.8rem 0', scrollbarWidth: 'thin', scrollbarColor: 'rgba(37,99,235,0.2) transparent' }}
           role="navigation"
           aria-label="Menú principal"
@@ -189,7 +189,7 @@ const Sidebar = ({ activeSection, collapsed, isMobile, mobileOpen, onNavigate, o
             </div>
           )}
 
-          {NAV_ITEMS.slice(3).map((item) => (
+          {NAV_ITEMS.slice(3, 5).map((item) => (
             <NavButton
               key={item.id}
               item={item}
@@ -198,6 +198,22 @@ const Sidebar = ({ activeSection, collapsed, isMobile, mobileOpen, onNavigate, o
               onClick={() => onNavigate(item.id)}
             />
           ))}
+
+          {/* Spacer — empuja Admin hacia abajo */}
+          <div style={{ flex: 1, minHeight: '4rem' }} />
+
+          {!isCollapsed && (
+            <div className="font-bold text-text-dim uppercase tracking-widest px-6 pb-2" style={{ fontSize: '0.65rem', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+              ADMIN
+            </div>
+          )}
+
+          <NavButton
+            item={NAV_ITEMS[5]}
+            active={activeSection === 'admin'}
+            collapsed={isCollapsed}
+            onClick={() => onNavigate('admin')}
+          />
         </nav>
 
         {/* ── Social links ── */}

@@ -7,19 +7,30 @@ const WhatsAppFAB = () => (
     rel="noopener noreferrer"
     title="Contactar por WhatsApp"
     aria-label="Contactar por WhatsApp"
-    className="fixed z-[9999] flex items-center gap-2 font-semibold text-white no-underline"
+    className="fixed z-[9999] flex items-center justify-center"
     style={{
-      bottom: '2rem', right: '2rem',
-      background: 'linear-gradient(135deg, #25D366, #128C7E)',
-      borderRadius: '50px',
-      padding: '0.7rem 1.2rem',
-      fontSize: '0.88rem',
-      boxShadow: '0 4px 20px rgba(37,211,102,0.45), 0 0 0 4px rgba(37,211,102,0.1)',
-      animation: 'logoPulse 3s ease-in-out infinite',
+      bottom: '1.5rem', right: '1.5rem',
+      width: 44, height: 44,
+      borderRadius: '50%',
+      background: 'rgba(37,211,102,0.82)',
+      boxShadow: '0 2px 10px rgba(37,211,102,0.28)',
+      transition: 'transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease',
+      opacity: 0.82,
+    }}
+    onMouseEnter={e => {
+      const el = e.currentTarget as HTMLAnchorElement;
+      el.style.transform = 'scale(1.1)';
+      el.style.opacity = '1';
+      el.style.boxShadow = '0 4px 18px rgba(37,211,102,0.5)';
+    }}
+    onMouseLeave={e => {
+      const el = e.currentTarget as HTMLAnchorElement;
+      el.style.transform = '';
+      el.style.opacity = '0.82';
+      el.style.boxShadow = '0 2px 10px rgba(37,211,102,0.28)';
     }}
   >
-    <WhatsAppIcon width={22} height={22} fill="white" />
-    WhatsApp
+    <WhatsAppIcon width={20} height={20} fill="white" />
   </a>
 );
 

@@ -4,94 +4,324 @@ interface DashboardProps {
   onNavigate: (id: SectionId) => void;
 }
 
-const stats = [
-  { emoji: '🏙️', value: '32', label: 'Ciudades cubiertas' },
-  { emoji: '⚡', value: '847', label: 'Instalaciones' },
-  { emoji: '🛡️', value: '25 años', label: 'Garantía sistema' },
-  { emoji: '💰', value: '100%', label: 'Energía renovable' },
-  { emoji: '🌿', value: '1,240 t', label: 'CO₂ evitado' },
+/* ── Icons ── */
+const SunIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+    <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+  </svg>
+);
+const BoltIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+  </svg>
+);
+const GalleryIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
+  </svg>
+);
+const ShareIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+  </svg>
+);
+const ArrowIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+  </svg>
+);
+
+/* ── Data ── */
+const metrics = [
+  { value: '32',      label: 'Ciudades',       color: '#3b82f6' },
+  { value: '847+',    label: 'Instalaciones',  color: '#FFD700' },
+  { value: '25 años', label: 'Garantía',       color: '#10b981' },
+  { value: '1.240 t', label: 'CO₂ evitado',    color: '#f97316' },
 ];
 
-const cards: { icon: string; iconBg: string; title: string; desc: string; value: string; tag: string; section: SectionId }[] = [
-  { icon: '⚡', iconBg: 'rgba(255,208,0,0.12)', title: 'Servicios Prestados', desc: 'Consultoría, diseño de sistemas y asesoría técnica personalizada para cada cliente.', value: '1,240+', tag: '✅ Activo', section: 'servicios' },
-  { icon: '🔆', iconBg: 'rgba(37,99,235,0.12)', title: 'Instalaciones Completadas', desc: 'Sistemas fotovoltaicos instalados en residencias, empresas e industrias de Colombia.', value: '847', tag: '🔆 En crecimiento', section: 'instalados' },
-  { icon: '📡', iconBg: 'rgba(59,130,246,0.12)', title: 'Comunidad Digital', desc: 'Síguenos en nuestras redes sociales y mantente al tanto de promociones y novedades.', value: '12.5K', tag: '📈 Seguidores', section: 'redes' },
-  { icon: '🤖', iconBg: 'rgba(30,58,138,0.12)', title: 'Cotizador IA', desc: 'Obtén una cotización personalizada en minutos con nuestro asistente inteligente.', value: 'Gratis', tag: '🚀 Disponible 24/7', section: 'chatbot' },
+const actions = [
+  {
+    section:  'chatbot'   as SectionId,
+    icon:     <BoltIcon />,
+    color:    '#FFD700',
+    gradient: 'linear-gradient(135deg, #FFD000 0%, #FF8C00 100%)',
+    glow:     'rgba(255,160,0,0.25)',
+    title:    'Cotizador Solar',
+    desc:     'Ingresá tu factura y recibí en 2 minutos el cálculo exacto de paneles, costo y retorno.',
+    cta:      'Cotizá gratis',
+  },
+  {
+    section:  'instalados' as SectionId,
+    icon:     <GalleryIcon />,
+    color:    '#60a5fa',
+    gradient: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
+    glow:     'rgba(37,99,235,0.25)',
+    title:    'Galería de Obras',
+    desc:     'Instalaciones reales en hogares y empresas de Colombia. Resultados verificables.',
+    cta:      'Ver galería',
+  },
+  {
+    section:  'redes'      as SectionId,
+    icon:     <ShareIcon />,
+    color:    '#34d399',
+    gradient: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+    glow:     'rgba(16,185,129,0.25)',
+    title:    'Comunidad',
+    desc:     'Seguinos en redes y enterate de promociones, novedades y casos de éxito.',
+    cta:      'Ver redes',
+  },
 ];
+
+/* ── Hover helpers (inline) ── */
+const hoverBtn = (el: HTMLButtonElement | HTMLDivElement, on: boolean, base: string, hover: string) => {
+  el.style.transform = on ? 'translateY(-2px)' : '';
+  el.style.boxShadow = on ? hover : base;
+};
 
 const Dashboard = ({ onNavigate }: DashboardProps) => (
-  <section className="animate-fadeIn">
-    <div className="mb-6">
-      <h1 className="shimmer-text font-orbitron font-black text-2xl tracking-wide">☀️ Panel de Control</h1>
-      <p className="text-text-muted mt-1 text-sm">Bienvenido al sistema de gestión de energía solar — Pereira, Colombia</p>
-    </div>
+  <section className="animate-fadeIn" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
-    {/* Cards */}
-    <div className="grid gap-5 mb-6" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
-      {cards.map((c) => (
-        <div
-          key={c.title}
-          className="glass-card p-5 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-blue-500"
-          style={{ userSelect: 'none' }}
-          onClick={() => onNavigate(c.section)}
-        >
-          <div className="flex items-center justify-center rounded-xl text-2xl mb-4" style={{ width: 50, height: 50, background: c.iconBg }}>
-            {c.icon}
-          </div>
-          <div className="font-bold text-white mb-1" style={{ fontSize: '0.95rem' }}>{c.title}</div>
-          <div className="text-text-muted leading-relaxed" style={{ fontSize: '0.8rem' }}>{c.desc}</div>
-          <div className="font-orbitron font-bold text-accent mt-2" style={{ fontSize: '1.2rem' }}>{c.value}</div>
-          <span
-            className="inline-flex items-center gap-1 mt-2 text-teal"
-            style={{ fontSize: '0.7rem', background: 'rgba(37,99,235,0.1)', border: '1px solid rgba(37,99,235,0.2)', borderRadius: 20, padding: '0.18rem 0.6rem' }}
-          >
-            {c.tag}
-          </span>
-        </div>
-      ))}
-    </div>
+    {/* ── HERO ── */}
+    <div style={{
+      position: 'relative',
+      borderRadius: 24,
+      overflow: 'hidden',
+      padding: 'clamp(1.5rem, 5vw, 3rem)',
+      background: 'linear-gradient(135deg, #0b1527 0%, #0d1f3c 50%, #091220 100%)',
+      border: '1px solid rgba(37,99,235,0.3)',
+      boxShadow: '0 24px 64px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06)',
+    }}>
+      {/* Dot-grid texture */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        backgroundImage: 'radial-gradient(rgba(148,163,184,0.07) 1px, transparent 1px)',
+        backgroundSize: '28px 28px',
+      }} />
+      {/* Gold glow */}
+      <div style={{
+        position: 'absolute', top: -100, right: -100, width: 360, height: 360, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(255,200,0,0.18) 0%, transparent 65%)',
+        pointerEvents: 'none',
+      }} />
+      {/* Blue glow */}
+      <div style={{
+        position: 'absolute', bottom: -80, left: 100, width: 240, height: 240, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(37,99,235,0.22) 0%, transparent 65%)',
+        pointerEvents: 'none',
+      }} />
 
-    {/* CTA */}
-    <div
-      className="glass-card p-5 mb-6"
-      style={{ background: 'linear-gradient(135deg,rgba(255,140,0,0.08),rgba(255,208,0,0.04))', borderColor: 'rgba(255,208,0,0.2)' }}
-    >
-      <div className="flex items-center gap-4 flex-wrap">
-        <div className="flex-1" style={{ minWidth: 200 }}>
-          <div className="font-orbitron font-bold text-accent tracking-widest mb-1" style={{ fontSize: '0.8rem' }}>
-            ¿LISTO PARA INSTALAR?
-          </div>
-          <p className="text-text-muted leading-relaxed" style={{ fontSize: '0.85rem' }}>
-            Usa nuestro chatbot para obtener una cotización instantánea personalizada. Sin compromisos, 100% gratuito.
-          </p>
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* Badge */}
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+          background: 'rgba(255,208,0,0.12)', border: '1px solid rgba(255,208,0,0.3)',
+          borderRadius: 20, padding: '0.28rem 0.9rem', marginBottom: '1.25rem',
+          fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.08em',
+          textTransform: 'uppercase' as const, color: '#FFD700',
+          fontFamily: 'Rajdhani, sans-serif',
+        }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FFD700', display: 'inline-block', animation: 'blink 2s ease-in-out infinite' }} />
+          Energía Solar · Pereira, Colombia
         </div>
-        <button
-          onClick={() => onNavigate('chatbot')}
-          className="font-bold text-black cursor-pointer transition-all hover:-translate-y-0.5"
-          style={{
-            background: 'linear-gradient(135deg,#FFD000,#FF8C00)',
-            border: 'none',
-            padding: '0.75rem 1.5rem',
-            borderRadius: 12,
-            fontSize: '0.9rem',
-            boxShadow: '0 4px 16px rgba(255,140,0,0.35)',
-          }}
-        >
-          🤖 Iniciar Cotización
-        </button>
+
+        {/* Title */}
+        <h1 style={{
+          fontFamily: 'Orbitron, sans-serif', fontWeight: 900,
+          fontSize: 'clamp(2rem, 5.5vw, 3.2rem)',
+          lineHeight: 1.08, marginBottom: '1rem',
+          color: '#ffffff',
+          textShadow: '0 0 60px rgba(37,99,235,0.4)',
+        }}>
+          Solar Full{' '}
+          <span style={{
+            background: 'linear-gradient(135deg, #FFD700, #FF8C00)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          }}>Energy</span>
+        </h1>
+
+        {/* Sub */}
+        <p style={{
+          color: '#94a3b8', fontSize: 'clamp(0.85rem, 1.6vw, 1rem)',
+          lineHeight: 1.75, maxWidth: 520, marginBottom: '2rem',
+        }}>
+          Sistemas fotovoltaicos instalados en 32 ciudades de Colombia.
+          <br />Garantizados por 25 años, rentables desde el primer año.
+        </p>
+
+        {/* CTAs */}
+        <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: '0.75rem' }}>
+          <button
+            onClick={() => onNavigate('chatbot')}
+            onMouseEnter={e => hoverBtn(e.currentTarget as HTMLButtonElement, true, '0 4px 24px rgba(255,140,0,0.4)', '0 8px 36px rgba(255,140,0,0.6)')}
+            onMouseLeave={e => hoverBtn(e.currentTarget as HTMLButtonElement, false, '0 4px 24px rgba(255,140,0,0.4)', '')}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              padding: '0.85rem 1.75rem', borderRadius: 12, border: 'none',
+              background: 'linear-gradient(135deg, #FFD000, #FF8C00)',
+              color: '#0a0a0a', fontWeight: 800, fontSize: '0.92rem',
+              cursor: 'pointer', transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+              boxShadow: '0 4px 24px rgba(255,140,0,0.4)',
+            }}>
+            <SunIcon /> Cotizá ahora — es gratis
+          </button>
+          <button
+            onClick={() => onNavigate('instalados')}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.10)';
+              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,255,255,0.28)';
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.06)';
+              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,255,255,0.15)';
+            }}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+              padding: '0.85rem 1.4rem', borderRadius: 12,
+              background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.15)',
+              color: '#e2e8f0', fontWeight: 600, fontSize: '0.88rem',
+              cursor: 'pointer', transition: 'background 0.18s ease, border-color 0.18s ease',
+            }}>
+            Ver instalaciones <ArrowIcon />
+          </button>
+        </div>
       </div>
     </div>
 
-    {/* Stats */}
-    <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
-      {stats.map((s) => (
-        <div key={s.label} className="stat-chip">
-          <span className="block text-2xl mb-1">{s.emoji}</span>
-          <div className="font-orbitron font-bold text-accent" style={{ fontSize: '0.95rem' }}>{s.value}</div>
-          <div className="text-text-muted uppercase tracking-widest mt-0.5" style={{ fontSize: '0.68rem' }}>{s.label}</div>
+    {/* ── METRICS ── */}
+    <div style={{
+      display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+      background: '#0f172a',
+      border: '1px solid rgba(255,255,255,0.07)',
+      borderRadius: 16, overflow: 'hidden',
+    }}>
+      {metrics.map((m, i) => (
+        <div key={m.label} style={{
+          padding: '1.25rem 0.75rem', textAlign: 'center',
+          borderRight: i < metrics.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+          position: 'relative',
+        }}>
+          <div style={{
+            position: 'absolute', top: 0, left: '20%', right: '20%', height: 2,
+            background: m.color, borderRadius: '0 0 4px 4px', opacity: 0.8,
+          }} />
+          <div style={{
+            fontFamily: 'Orbitron, sans-serif', fontWeight: 800,
+            fontSize: 'clamp(1rem, 2.5vw, 1.4rem)', color: m.color,
+            lineHeight: 1.15, marginTop: '0.5rem',
+          }}>{m.value}</div>
+          <div style={{
+            fontSize: '0.63rem', color: '#475569',
+            textTransform: 'uppercase' as const, letterSpacing: '0.09em', marginTop: '0.3rem',
+          }}>{m.label}</div>
         </div>
       ))}
     </div>
+
+    {/* ── ACTION CARDS ── */}
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+      gap: '0.9rem',
+    }}>
+      {actions.map((card) => (
+        <button
+          key={card.title}
+          onClick={() => onNavigate(card.section)}
+          onMouseEnter={e => {
+            const el = e.currentTarget as HTMLButtonElement;
+            el.style.transform = 'translateY(-4px)';
+            el.style.boxShadow = `0 16px 48px ${card.glow}, 0 4px 16px rgba(0,0,0,0.3)`;
+            el.style.borderColor = card.color + '55';
+          }}
+          onMouseLeave={e => {
+            const el = e.currentTarget as HTMLButtonElement;
+            el.style.transform = '';
+            el.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
+            el.style.borderColor = 'rgba(255,255,255,0.07)';
+          }}
+          style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
+            textAlign: 'left', padding: '0',
+            background: '#0f172a',
+            border: '1px solid rgba(255,255,255,0.07)',
+            borderRadius: 18, overflow: 'hidden',
+            cursor: 'pointer',
+            transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+          }}>
+          {/* Color stripe */}
+          <div style={{ width: '100%', height: 3, background: card.gradient }} />
+          <div style={{ padding: '1.4rem', display: 'flex', flexDirection: 'column', flex: 1, width: '100%' }}>
+            {/* Icon */}
+            <div style={{
+              width: 50, height: 50, borderRadius: 14,
+              background: card.gradient, opacity: 0.15,
+              position: 'absolute',
+            }} />
+            <div style={{
+              width: 50, height: 50, borderRadius: 14,
+              border: `1.5px solid ${card.color}40`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              marginBottom: '1rem', color: card.color,
+              background: `${card.color}12`,
+            }}>
+              {card.icon}
+            </div>
+            <div style={{ fontWeight: 700, fontSize: '1rem', color: '#f1f5f9', marginBottom: '0.45rem' }}>
+              {card.title}
+            </div>
+            <div style={{ fontSize: '0.79rem', color: '#64748b', lineHeight: 1.65, flex: 1, marginBottom: '1.1rem' }}>
+              {card.desc}
+            </div>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+              fontSize: '0.78rem', fontWeight: 700, color: card.color,
+            }}>
+              {card.cta} <ArrowIcon />
+            </div>
+          </div>
+        </button>
+      ))}
+    </div>
+
+    {/* ── SERVICES BANNER ── */}
+    <button
+      onClick={() => onNavigate('servicios')}
+      onMouseEnter={e => {
+        const el = e.currentTarget as HTMLButtonElement;
+        el.style.background = '#131f35';
+        el.style.borderColor = 'rgba(37,99,235,0.35)';
+      }}
+      onMouseLeave={e => {
+        const el = e.currentTarget as HTMLButtonElement;
+        el.style.background = '#0f172a';
+        el.style.borderColor = 'rgba(255,255,255,0.07)';
+      }}
+      style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem',
+        width: '100%', textAlign: 'left', padding: '1.1rem 1.4rem',
+        background: '#0f172a', border: '1px solid rgba(255,255,255,0.07)',
+        borderRadius: 14, cursor: 'pointer',
+        transition: 'background 0.18s ease, border-color 0.18s ease',
+        color: '#f1f5f9',
+      }}>
+      <div>
+        <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#f1f5f9', marginBottom: '0.2rem' }}>
+          Nuestros Servicios
+        </div>
+        <div style={{ fontSize: '0.78rem', color: '#475569' }}>
+          Consultoría · Diseño · Instalación · Soporte post-venta
+        </div>
+      </div>
+      <div style={{ color: '#3b82f6', flexShrink: 0 }}>
+        <ArrowIcon />
+      </div>
+    </button>
+
   </section>
 );
 

@@ -54,6 +54,7 @@ const App = () => {
     window.history.pushState({ section: id }, '', `#${id}`);
     setActiveSection(id);
     closeMobile();
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, [closeMobile]);
 
   const marginLeft = isMobile ? 0 : (collapsed ? SIDEBAR_COLLAPSED : SIDEBAR_W);

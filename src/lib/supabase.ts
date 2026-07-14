@@ -60,7 +60,7 @@ export type Database = {
   };
 };
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_URL = 'https://jcozdyumnnrorswlmbmy.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impjb3pkeXVtbm5yb3Jzd2xtYm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5NjI4NjMsImV4cCI6MjA5OTUzODg2M30.WY6yGinJRUZhYiPAxABT2jhdnuMiskIL02ZanB8UH-A';
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_KEY);
