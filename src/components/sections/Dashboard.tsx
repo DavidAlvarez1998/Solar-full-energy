@@ -91,9 +91,9 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
       borderRadius: 24,
       overflow: 'hidden',
       padding: 'clamp(1.5rem, 5vw, 3rem)',
-      background: 'linear-gradient(135deg, #0b1527 0%, #0d1f3c 50%, #091220 100%)',
-      border: '1px solid rgba(37,99,235,0.3)',
-      boxShadow: '0 24px 64px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06)',
+      background: 'var(--hero-bg)',
+      border: '1px solid var(--hero-border)',
+      boxShadow: '0 24px 64px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06)',
     }}>
       {/* Dot-grid texture */}
       <div style={{
@@ -133,8 +133,8 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
           fontFamily: 'Orbitron, sans-serif', fontWeight: 900,
           fontSize: 'clamp(2rem, 5.5vw, 3.2rem)',
           lineHeight: 1.08, marginBottom: '1rem',
-          color: '#ffffff',
-          textShadow: '0 0 60px rgba(37,99,235,0.4)',
+          color: 'var(--hero-title)',
+          textShadow: '0 0 60px rgba(37,99,235,0.3)',
         }}>
           Solar Full{' '}
           <span style={{
@@ -145,7 +145,7 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
 
         {/* Sub */}
         <p style={{
-          color: '#94a3b8', fontSize: 'clamp(0.85rem, 1.6vw, 1rem)',
+          color: 'var(--hero-sub)', fontSize: 'clamp(0.85rem, 1.6vw, 1rem)',
           lineHeight: 1.75, maxWidth: 520, marginBottom: '2rem',
         }}>
           Sistemas fotovoltaicos instalados en 32 ciudades de Colombia.
@@ -170,18 +170,18 @@ const Dashboard = ({ onNavigate }: DashboardProps) => (
           <button
             onClick={() => onNavigate('instalados')}
             onMouseEnter={e => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.10)';
-              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,255,255,0.28)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'var(--hero-outline-bg-h)';
+              (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--hero-outline-bdr-h)';
             }}
             onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.06)';
-              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,255,255,0.15)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'var(--hero-outline-bg)';
+              (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--hero-outline-border)';
             }}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
               padding: '0.85rem 1.4rem', borderRadius: 12,
-              background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.15)',
-              color: '#e2e8f0', fontWeight: 600, fontSize: '0.88rem',
+              background: 'var(--hero-outline-bg)', border: '1.5px solid var(--hero-outline-border)',
+              color: 'var(--hero-outline-color)', fontWeight: 600, fontSize: '0.88rem',
               cursor: 'pointer', transition: 'background 0.18s ease, border-color 0.18s ease',
             }}>
             Ver instalaciones <ArrowIcon />
